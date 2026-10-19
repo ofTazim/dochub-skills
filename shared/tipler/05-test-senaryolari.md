@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Test Senaryoları dokümanı.
+Test kapsamını, gereksinim ile senaryo eşleşmesini, senaryo tablosunu ve çıkış kriterlerini test mühendisleri için yazar. Gereksinimin kendisini ya da otomasyon kodunun ayrıntısını içermez; her senaryo bir gereksinime bağlanır.
 
 ## Zorunlu başlıklar
 

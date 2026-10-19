@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Entegrasyon Kılavuzu dokümanı.
+Ürünün API'sine bağlanmak isteyen müşteri geliştiricisi ve partner için hızlı başlangıcı, ortamları ve kimlik doğrulamayı, endpoint tablosunu, hata kodlarını ve sürümlemeyi anlatır. Örneklerde gerçek parola, token ve IP adresi yerine yer tutucu kullanılır; iç mimari ve kurulum ayrıntısı içermez.
 
 ## Zorunlu başlıklar
 

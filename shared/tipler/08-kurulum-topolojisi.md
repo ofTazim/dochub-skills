@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Kurulum Topolojisi dokümanı.
+Desteklenen dağıtım seçeneklerini, referans diyagramı, bileşen gereksinimlerini, boyutlandırmayı ve ağ ile port gereksinimlerini DevOps ekibi için özetler. Adım adım kurulum talimatı ya da gerçek IP adresi içermez; kurulum adımları Kurulum Dokümanı'ndadır.
 
 ## Zorunlu başlıklar
 

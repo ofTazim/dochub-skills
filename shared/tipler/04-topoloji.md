@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Topoloji dokümanı.
+Ortamları, sunucu ve servis envanterini, port matrisini ve yedeklilik yapısını topoloji diyagramıyla yazılımcı ve mimarlar için gösterir. Kurulum adımı, boyutlandırma rehberi ya da gerçek parola ve IP adresi içermez; künye bilgisi yan panelde tutulur.
 
 ## Zorunlu başlıklar
 

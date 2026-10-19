@@ -1,7 +1,7 @@
 ---
 name: dochub-changelog
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "DocHub dokümantasyonu için son sürüm etiketinden bu yana commit ve PR başlıklarından changelog sürüm sayfası yazar (ön madde surum/tarih/etiketler; Yenilikler, Düzeltilen sorunlar, Kırıcı değişiklikler) ve SUMMARY.md'ye ekler. Kullan: 'sürüm notu yaz', 'release notes', changelog, 'yeni sürüm yayınlıyoruz'. Use to write a DocHub documentation changelog / release notes page from git history since the last tag, with front matter (surum, tarih YYYY-MM-DD, etiketler) and SUMMARY.md update."
 ---
 

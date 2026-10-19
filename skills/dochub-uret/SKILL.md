@@ -1,7 +1,7 @@
 ---
 name: dochub-uret
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "Koddan DocHub doküman içeriği üretir: tip şablonunu ve zorunlu başlıkları sırayla doldurur, GitBook bloklarını kullanır, kod örneklerini gerçek dosyalardan alır, emin olunmayan yere 'Doğrulanmalı' notu koyar, sonunda doğrular. Kullan: 'dokümanı yaz', 'README'yi doldur', kurulum/mimari/API/güvenlik dokümantasyonu üretimi. Use to generate DocHub documentation content from source code (architecture, deployment, API reference, security, tests), following the type template and writing guide."
 ---
 

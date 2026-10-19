@@ -3,8 +3,8 @@
 Ürün repo'nuzda **DocHub uyumlu dokümantasyonu** üreten ve güncel tutan skill'ler. Claude Code ve GitHub Copilot ile çalışır.
 Bu repo DocHub tarafından üretilir ve yayınlanır; dosyaları elle düzenlemeyin, yapılandırmayı DocHub'dan değiştirin.
 
-- Paket sürümü: `1.1.0`
-- Yapılandırma özeti: `494bb6544d50ac6f5c369014fd8ed9a998c6ced94d8a167fd681c2c0afa03df5`
+- Paket sürümü: `1.2.0`
+- Yapılandırma özeti: `377e89862b479c7efa733f6c6609b721198e1a3cd5271ae5babba7df02943e10`
 - Kapsanan doküman tipi sayısı: 13
 
 ## Nasıl çalışır?
@@ -28,6 +28,26 @@ Künye bilgileri (persona, gizlilik, sahip, reviewer, onaylayan) repo'da tutulma
 Önerilen akış: `dochub-kesif` → `dochub-iskelet` → `dochub-uret` → (her değişiklikte) `dochub-guncelle` ve sürümlerde `dochub-changelog`.
 Her üretim ve güncelleme `dochub-dogrula` ile biter.
 
+## Başlarken (ürün ekibi)
+
+1. Plugin'i kurun (aşağıdaki **Kurulum**; ekip için `.claude/settings.json` önerilir).
+2. Repo'da Claude Code'a "dokümantasyona başlayalım" deyin: `dochub-kesif` önerisini onaylayın, `dochub-iskelet` ve `dochub-uret` dokümanları yazar.
+3. `dochub.yaml` içindeki `urun` adının DocHub'daki ürün adıyla birebir aynı olduğunu kontrol edin, değişikliği PR ile ana dala alın.
+4. DocHub yöneticisinden repo'nun GitHub App kurulumuna eklenmesini ve ürün sayfasında **GitHub bağlantısı**nın açılmasını isteyin. Dokümanlar taslak olarak gelir; künyeyi DocHub'da doldurup onaya gönderin.
+
+## Dokümanları güncel tutma
+
+Ürün repo'nuzun kökündeki `CLAUDE.md` dosyasına (Copilot için `.github/copilot-instructions.md`) şu kuralı ekleyin; asistan her işte dokümanları kodla birlikte günceller:
+
+```markdown
+## Dokümantasyon (DocHub)
+
+Kod değiştiren her iş PR açılmadan önce:
+1. `dochub-guncelle` ile dalın ana dala göre farkından etkilenen dokümanları güncelle.
+2. Kullanıcıya görünür değişiklikse `dochub-changelog` ile sürüm sayfası ekle.
+3. `dochub-dogrula` hatasız geçmeli; doküman değişiklikleri kodla aynı PR'a girer.
+```
+
 ## Kurulum
 
 ### Claude Code
@@ -38,6 +58,19 @@ Her üretim ve güncelleme `dochub-dogrula` ile biter.
 ```
 
 Güncelleme: `/plugin marketplace update dochub-skills`.
+
+**Ekip için önerilen:** aşağıdaki dosyayı ürün repo'nuza `.claude/settings.json` olarak bir kez commit'leyin. Repo'yu Claude Code'da açan herkese plugin'i kurması önerilir; kimsenin komut çalıştırması gerekmez.
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "dochub-skills": { "source": { "source": "github", "repo": "ofTazim/dochub-skills" } }
+  },
+  "enabledPlugins": { "dochub@dochub-skills": true }
+}
+```
+
+Plugin, `ofTazim/dochub-skills` repo'sunu okuyabilen her geliştiricinin kendi git kimliğiyle indirilir.
 
 ### GitHub Copilot
 
@@ -61,19 +94,19 @@ Node 18 veya üstü gerekir; bağımlılık yoktur. Copilot kopyasında yol `.gi
 
 | No | Ad | Amaç | Zorunlu başlıklar | Dosya |
 |---|---|---|---|---|
-| 01 | Modül - Özellik Seti | Modül - Özellik Seti dokümanı. | Modül listesi, Modül başına özellik tablosu, Bağımlılıklar, Bu ürün neyi yapmaz | shared/tipler/01-modul-ozellik-seti.md |
-| 02 | Ürün Geliştirme Dokümanı (FATAD) | Ürün Geliştirme Dokümanı (FATAD) dokümanı. | İş ihtiyacı, Gereksinimler (ID'li), İş kuralları, Kabul kriterleri, Riskler ve açık sorular | shared/tipler/02-urun-gelistirme-dokumani-fatad.md |
-| 03 | Sistem Dizayn Dokümanı | Sistem Dizayn Dokümanı dokümanı. | Mimari diyagram, Bileşenler ve sorumlulukları, Veri modeli, Arayüzler, Teknik kararlar | shared/tipler/03-sistem-dizayn-dokumani.md |
-| 04 | Topoloji | Topoloji dokümanı. | Ortamlar, Topoloji diyagramı, Sunucu ve servis envanteri, Port matrisi, Yedeklilik | shared/tipler/04-topoloji.md |
-| 05 | Test Senaryoları | Test Senaryoları dokümanı. | Test kapsamı, Gereksinim–senaryo eşleşmesi, Senaryo tablosu, Çıkış kriterleri | shared/tipler/05-test-senaryolari.md |
-| 06 | Test Otomasyonu Dokümanları | Test Otomasyonu Dokümanları dokümanı. | Otomasyon kapsamı, Repo ve çalıştırma, CI/CD bağlantısı, Senaryo envanteri, Bakım sahibi | shared/tipler/06-test-otomasyonu-dokumanlari.md |
-| 07 | Kurulum Dokümanı | Kurulum Dokümanı dokümanı. | Önkoşullar, Kurulum adımları, Konfigürasyon parametreleri, Doğrulama, Geri alma, Sık karşılaşılan hatalar | shared/tipler/07-kurulum-dokumani.md |
-| 08 | Kurulum Topolojisi | Kurulum Topolojisi dokümanı. | Dağıtım seçenekleri, Referans diyagram, Bileşen gereksinimleri, Boyutlandırma, Ağ ve port gereksinimleri | shared/tipler/08-kurulum-topolojisi.md |
-| 11 | Güvenlik Dokümanları | Güvenlik Dokümanları dokümanı. | Kimlik ve erişim, Veri koruma, Loglama, Açık yönetim süreci, Uyum ve sertifikalar, Sorumluluk paylaşımı | shared/tipler/11-guvenlik-dokumanlari.md |
-| 12 | Ürün Roadmapi | Ürün Roadmapi dokümanı. | Şimdi, Sıradaki, Sonra, Bu dönem yapılmayacaklar | shared/tipler/12-urun-roadmapi.md |
-| 16 | Entegrasyon Kılavuzu | Entegrasyon Kılavuzu dokümanı. | Hızlı başlangıç, Ortamlar ve kimlik doğrulama, Endpoint tablosu, Hata kodları, Sürümleme | shared/tipler/16-entegrasyon-kilavuzu.md |
-| 17 | Kullanım Kılavuzu | Kullanım Kılavuzu dokümanı. | Kimler için, Başlarken, Görev akışları, Hata mesajları, SSS | shared/tipler/17-kullanim-kilavuzu.md |
-| 18 | Release Notları | Release Notları dokümanı. | Sürüm künyesi, Yenilikler, Düzeltilen sorunlar, Kırıcı değişiklikler, Bilinen sorunlar | shared/tipler/18-release-notlari.md |
+| 01 | Modül - Özellik Seti | Ürünün modüllerini ve her modülün sunduğu özellikleri, bağımlılıklarıyla birlikte ve ürünün neyi yapmadığını da belirterek anlatır; ürün yöneticileri, satış ve ortaklar için hazırlanır. Teknik tasarım, kurulum ya da test ayrıntısı ile künye bilgisi (sahip, persona, gizlilik) içermez. | Modül listesi, Modül başına özellik tablosu, Bağımlılıklar, Bu ürün neyi yapmaz | shared/tipler/01-modul-ozellik-seti.md |
+| 02 | Ürün Geliştirme Dokümanı (FATAD) | Özelliğin iş ihtiyacını, gereksinimlerini, kabul kriterlerini ve risklerini yazılımcı, analist ve test mühendisi için toplar. Gereksinimler ID'li (ör. `GRK-01`) ve test edilebilir yazılır; örnek: "Yanıt süresi 2 saniyenin altında olmalıdır", "Sistem hızlı olmalıdır" değil. Mimari ve künye içermez. | İş ihtiyacı, Gereksinimler (ID'li), İş kuralları, Kabul kriterleri, Riskler ve açık sorular | shared/tipler/02-urun-gelistirme-dokumani-fatad.md |
+| 03 | Sistem Dizayn Dokümanı | Sistemin mimarisini, bileşenlerini ve sorumluluklarını, veri modelini, arayüzlerini ve alınan teknik kararları yazılımcı, analist ve test mühendisine anlatır. Gereksinim listesi, kurulum adımı ya da ortam envanteri içermez; bunlar FATAD, Kurulum ve Topoloji dokümanlarında yer alır. | Mimari diyagram, Bileşenler ve sorumlulukları, Veri modeli, Arayüzler, Teknik kararlar | shared/tipler/03-sistem-dizayn-dokumani.md |
+| 04 | Topoloji | Ortamları, sunucu ve servis envanterini, port matrisini ve yedeklilik yapısını topoloji diyagramıyla yazılımcı ve mimarlar için gösterir. Kurulum adımı, boyutlandırma rehberi ya da gerçek parola ve IP adresi içermez; künye bilgisi yan panelde tutulur. | Ortamlar, Topoloji diyagramı, Sunucu ve servis envanteri, Port matrisi, Yedeklilik | shared/tipler/04-topoloji.md |
+| 05 | Test Senaryoları | Test kapsamını, gereksinim ile senaryo eşleşmesini, senaryo tablosunu ve çıkış kriterlerini test mühendisleri için yazar. Gereksinimin kendisini ya da otomasyon kodunun ayrıntısını içermez; her senaryo bir gereksinime bağlanır. | Test kapsamı, Gereksinim–senaryo eşleşmesi, Senaryo tablosu, Çıkış kriterleri | shared/tipler/05-test-senaryolari.md |
+| 06 | Test Otomasyonu Dokümanları | Otomasyonun kapsamını, repo ve çalıştırma bilgisini, CI/CD bağlantısını, senaryo envanterini ve bakım sahibini test mühendisleri için anlatır. Manuel test senaryolarını ya da gerçek kimlik bilgilerini içermez; gizli değerler için değişken adı veya yer tutucu kullanılır. | Otomasyon kapsamı, Repo ve çalıştırma, CI/CD bağlantısı, Senaryo envanteri, Bakım sahibi | shared/tipler/06-test-otomasyonu-dokumanlari.md |
+| 07 | Kurulum Dokümanı | Ürünün kurulumunu önkoşullar, sıralı adımlar, parametreler, doğrulama, geri alma ve sık hatalarla DevOps ekibi için anlatır. Gerçek parola, token ve IP adresi yazılmaz; değişken adı ya da yer tutucu kullanılır. Mimari gerekçe ve boyutlandırma Sistem Dizayn ile Kurulum Topolojisi dokümanlarındadır. | Önkoşullar, Kurulum adımları, Konfigürasyon parametreleri, Doğrulama, Geri alma, Sık karşılaşılan hatalar | shared/tipler/07-kurulum-dokumani.md |
+| 08 | Kurulum Topolojisi | Desteklenen dağıtım seçeneklerini, referans diyagramı, bileşen gereksinimlerini, boyutlandırmayı ve ağ ile port gereksinimlerini DevOps ekibi için özetler. Adım adım kurulum talimatı ya da gerçek IP adresi içermez; kurulum adımları Kurulum Dokümanı'ndadır. | Dağıtım seçenekleri, Referans diyagram, Bileşen gereksinimleri, Boyutlandırma, Ağ ve port gereksinimleri | shared/tipler/08-kurulum-topolojisi.md |
+| 11 | Güvenlik Dokümanları | Ürünün kimlik ve erişim, veri koruma, loglama, açık yönetim süreci, uyum ve sertifikalar ile sorumluluk paylaşımı konularını güvenlik ekibi ve müşteri güvenlik ekipleri için açıklar. Gerçek parola, anahtar ve IP adresi içermez; tarama raporlarının ayrıntısı DAST ve SAST özetlerinde tutulur. | Kimlik ve erişim, Veri koruma, Loglama, Açık yönetim süreci, Uyum ve sertifikalar, Sorumluluk paylaşımı | shared/tipler/11-guvenlik-dokumanlari.md |
+| 12 | Ürün Roadmapi | Ürünün Şimdi, Sıradaki ve Sonra başlıkları altındaki planını ve bu dönem yapılmayacakları ürün yöneticileri ile satış için yazar. Tarih taahhüdü, teknik tasarım ya da sürüm notu içermez; gerçekleşen değişiklikler Release Notları'nda yer alır. | Şimdi, Sıradaki, Sonra, Bu dönem yapılmayacaklar | shared/tipler/12-urun-roadmapi.md |
+| 16 | Entegrasyon Kılavuzu | Ürünün API'sine bağlanmak isteyen müşteri geliştiricisi ve partner için hızlı başlangıcı, ortamları ve kimlik doğrulamayı, endpoint tablosunu, hata kodlarını ve sürümlemeyi anlatır. Örneklerde gerçek parola, token ve IP adresi yerine yer tutucu kullanılır; iç mimari ve kurulum ayrıntısı içermez. | Hızlı başlangıç, Ortamlar ve kimlik doğrulama, Endpoint tablosu, Hata kodları, Sürümleme | shared/tipler/16-entegrasyon-kilavuzu.md |
+| 17 | Kullanım Kılavuzu | Son kullanıcının ürünü kullanmasını sağlar: kimler için olduğunu, başlarken adımlarını, görev akışlarını, hata mesajlarını ve sık sorulan soruları anlatır. Teknik tasarım, kurulum ya da yönetici konfigürasyonu içermez; uzun kılavuzlar modül başına alt sayfalara bölünür. | Kimler için, Başlarken, Görev akışları, Hata mesajları, SSS | shared/tipler/17-kullanim-kilavuzu.md |
+| 18 | Release Notları | Bir sürümde gelen yenilikleri, düzeltilen sorunları, kırıcı değişiklikleri ve bilinen sorunları müşteri ve satış için duyurur. Plan ya da roadmap maddesi, iç teknik tartışma ve gizli bilgi içermez; her madde kullanıcıya etkisi açısından yazılır. | Sürüm künyesi, Yenilikler, Düzeltilen sorunlar, Kırıcı değişiklikler, Bilinen sorunlar | shared/tipler/18-release-notlari.md |
 
 Ayrıntılar: `shared/tipler/`. `dochub.yaml` sözleşmesi: `shared/dochub-yaml.md`.
 

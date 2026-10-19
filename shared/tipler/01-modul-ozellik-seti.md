@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Modül - Özellik Seti dokümanı.
+Ürünün modüllerini ve her modülün sunduğu özellikleri, bağımlılıklarıyla birlikte ve ürünün neyi yapmadığını da belirterek anlatır; ürün yöneticileri, satış ve ortaklar için hazırlanır. Teknik tasarım, kurulum ya da test ayrıntısı ile künye bilgisi (sahip, persona, gizlilik) içermez.
 
 ## Zorunlu başlıklar
 

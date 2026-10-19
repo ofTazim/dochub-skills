@@ -1,7 +1,7 @@
 ---
 name: dochub-iskelet
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "Onaylanan DocHub doküman tipleri için repo'da klasör, README.md (zorunlu başlıklarla), SUMMARY.md ve changelog klasörünü kurar; var olan dosyaların üzerine yazmaz. Kullan: dokümantasyon iskeleti, 'klasörleri oluştur', 'dochub.yaml yaz', README/SUMMARY kurulumu. Use to scaffold DocHub documentation in a repo: create dochub.yaml, folders, README.md with required headings, SUMMARY.md (GitBook table of contents), changelog folder; idempotent."
 ---
 

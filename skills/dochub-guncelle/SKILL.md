@@ -1,7 +1,7 @@
 ---
 name: dochub-guncelle
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "Commit/PR farkına (git diff) göre dochub.yaml kaynaklar eşlemesiyle etkilenen DocHub dokümanlarını bulur ve yalnız ilgili bölümleri günceller; gerekirse changelog önerir, sonunda doğrular. Kullan: 'kod değişti dokümanı güncelle', PR sonrası dokümantasyon bakımı, drift kontrolü. Use to keep DocHub documentation up to date after code changes: map git diff to documents via dochub.yaml sources globs, update only affected sections, suggest changelog entry, validate."
 ---
 

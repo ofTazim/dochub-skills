@@ -1,7 +1,7 @@
 ---
 name: dochub-dogrula
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "DocHub doküman repo'sunu bağımlılıksız Node betiğiyle doğrular: dochub.yaml sözleşmesi, README ve zorunlu başlıklar, SUMMARY.md bağlantıları, başlık karakterleri, changelog ön maddesi ve Kısıtlı/Açık tiplerde hassas bilgi (IP, password/şifre/token). yaml, başlıklar, hassas bilgi ve başlık karakteri kurallarında DocHub ile aynı sonucu verir; CI'da kullanılır. Kullan: dokümantasyonu doğrula, 'dochub kontrolleri', CI şablonu. Use to validate DocHub documentation in a repo (dochub.yaml, required headings, SUMMARY links, changelog front matter, sensitive data) with a Node script."
 ---
 

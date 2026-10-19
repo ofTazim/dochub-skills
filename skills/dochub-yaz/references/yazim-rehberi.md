@@ -4,34 +4,36 @@ Bu rehber DocHub yönetim ekibinin "Nasıl yazılır" ayarıdır; yapılandırma
 
 ## Temel ilkeler
 
-Her doküman **tek bir okuyucu kitlesine** (persona) hitap eder.
-
-- Kısa ve aktif cümleler kurun.
-- Bir paragrafta tek fikir anlatın.
-- Kurum içi kısaltmaları ilk kullanımda açın.
+- Her doküman **tek bir okuyucu kitlesine** (persona) yazılır.
+- Yalnız doğrulanmış bilgiyi yazın; teyit edemediğiniz yere "Doğrulanmalı: …" uyarı notu koyun.
+- Kısa, aktif cümleler kurun; bir paragrafta tek fikir anlatın; kısaltmaları ilk kullanımda açın.
+- Gerçek parola, token veya IP adresi yazılmaz; değişken adını ya da `<ornek-deger>` yer tutucusunu kullanın.
 
 ## Başlık ve bölüm yapısı
 
-1. Başlık `NN · Doküman Adı — Ürün` biçimindedir; `/`, `\` ve `#` kullanılmaz.
-2. Künye (Persona · Gizlilik · Sahip · Güncelleme) sayfanın yan panelinde tutulur; içeriğe yazılmaz.
-3. Zorunlu başlıklar tipin şablonundaki sırayla yer alır. Başlığı içerikte H1 olarak tekrarlamayın; sayfa başlığı zaten görünür.
+- Sayfa başlığı DocHub'dan gelir; içerikte H1 (`#`) kullanmayın. Bölümler `##`, alt bölümler `###` ile başlar.
+- Tipin zorunlu başlıkları şablondaki yazımla ve sırayla bulunur.
+- Başlıklar kısa ad tamlamasıdır ("Kurulum adımları"); soru ya da cümle olmaz; `/`, `\` ve `#` içermez.
+- Künye (persona, gizlilik, sahip, onaylayanlar) yan panelde tutulur; içeriğe yazılmaz. Değişiklik geçmişi otomatik tutulur.
+- Uzun içeriği alt sayfalara bölün; her alt sayfa tek konuyu anlatır.
 
-Değişiklik geçmişi sayfanın Geçmiş bölümünde otomatik tutulur.
+## Bloklar
 
-## Gereksinim yazımı
+| İhtiyaç | Blok |
+|---|---|
+| Sıralı adımlar | Adımlar (stepper) |
+| Alternatifler (ortam, dil) | Sekmeler |
+| Uyarı, ipucu, not | İpucu (bilgi, uyarı, tehlike, başarı) |
+| Uzun ya da isteğe bağlı ayrıntı, SSS | Genişletilebilir |
+| Başka sayfaya geçiş | Düz bağlantı |
 
-Her gereksinim **test edilebilir** olmalıdır.
-
-- Doğru: *Yanıt süresi 2 saniyenin altında olmalıdır.*
-- Yanlış: *Sistem hızlı olmalıdır.*
-
-Gereksinimleri ID'li yazın (ör. `GRK-01`).
+Editörde `/` ile blok ekleyin. Dosya ekleri (PDF/ZIP) yerine SharePoint bağlantısı verin.
 
 ## Gizlilik sınıfları
 
 - **Açık:** müşteriyle paylaşılabilir; yetkisi olan müşteri firmaları portalda görür.
 - **İç Kullanım:** tüm çalışanlar okuyabilir.
-- **Kısıtlı:** IP adresi, parola, token gibi bilgiler içeremez.
+- **Kısıtlı:** gerçek parola/token değeri ve IP adresi içeremez (değişken adı ve yer tutucu serbesttir).
 - **Gizli:** yalnızca ürün ekibi ve yetkili roller.
 
 ## Onay ve yayın

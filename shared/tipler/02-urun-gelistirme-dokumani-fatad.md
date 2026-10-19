@@ -7,7 +7,7 @@ Bu dosya DocHub yapılandırmasından üretilir; elle düzenlemeyin. Dosya adı:
 
 ## Amaç
 
-Ürün Geliştirme Dokümanı (FATAD) dokümanı.
+Özelliğin iş ihtiyacını, gereksinimlerini, kabul kriterlerini ve risklerini yazılımcı, analist ve test mühendisi için toplar. Gereksinimler ID'li (ör. `GRK-01`) ve test edilebilir yazılır; örnek: "Yanıt süresi 2 saniyenin altında olmalıdır", "Sistem hızlı olmalıdır" değil. Mimari ve künye içermez.
 
 ## Zorunlu başlıklar
 

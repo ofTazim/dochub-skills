@@ -1,7 +1,7 @@
 ---
 name: dochub-yaz
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 description: "DocHub dokümantasyonu yazım kuralları ve desteklenen GitBook blokları başvurusu: hint, tabs, stepper, details, columns, updates, cards, embed, buton, ikon, kod başlığı, include, değişken; başlık ve hassas bilgi kuralları. Kullan: README.md/SUMMARY.md yazarken, blok sözdizimi sorarken, 'nasıl yazmalıyım'. Use when writing or editing documentation pages that DocHub syncs from Git: GitBook markdown blocks, SUMMARY.md grammar, page front matter, writing rules."
 ---
 
@@ -43,11 +43,11 @@ Görseller ve include dosyaları hem klasör düzeyinde (`<klasör>/.gitbook/…
 * Tipin **zorunlu `## ` başlıkları** katalogdaki yazımla ve sırayla bulunmalıdır (`../../shared/tipler/<NN>-<slug>.md`). Blok içindeki `## ` başlıkları (ör. `{% step %}` içinde) da sayılır; bu yüzden zorunlu başlıkla çakışan bir blok başlığı kullanmayın.
 * Başlıklarda `/`, `\` ve `#` karakteri olmaz (DocHub reddeder). `SUMMARY.md` bağlantı metinleri ve sürüm sayfası başlığı için de geçerlidir.
 * Başlıklar kısa, ad tamlamasıdır: "Kurulum", "Veri modeli". Soru ya da cümle olmaz.
-* **İstisna (tip 18, Release Notları):** kök `README.md` serbest bir giriş metnidir; zorunlu başlık aranmaz. Sürüm sayfalarında yalnız `## Yenilikler`, `## Düzeltilen sorunlar`, `## Kırıcı değişiklikler` başlıkları kullanılır (her biri isteğe bağlı, boşsa yazılmaz).
+* **İstisna (tip 18, Release Notları):** kök `README.md` serbest bir giriş metnidir; zorunlu başlık aranmaz. Sürüm sayfalarında yalnız `## Sürüm künyesi`, `## Yenilikler`, `## Düzeltilen sorunlar`, `## Kırıcı değişiklikler`, `## Bilinen sorunlar` başlıkları kullanılır (her biri isteğe bağlı, boşsa yazılmaz; başka başlık uyarı verir).
 
 ### Hassas bilgi kuralı
 
-Varsayılan gizliliği Kısıtlı ya da Açık olan tiplerde DocHub şunları hata sayar: IPv4 adresi (`10.20.30.40`) ve gerçek gizli değerleri hata sayar: `password`, `şifre`, `token`, `secret`, `api key` gibi bir anahtar adına atanmış ≥6 karakterlik değer (`SMTP_SIFRE=...`, `password: ...`), bilinen token biçimleri (GitHub, AWS, JWT, Slack) ve PEM özel anahtar başlığı. Sözcüklerin kendisi serbesttir; "Şifre en az 8 karakter olmalı" ya da tablodaki `SMTP_SIFRE` satırı bulgu değildir. Metinde:
+Varsayılan gizliliği Kısıtlı ya da Açık olan tiplerde DocHub şunları hata sayar: IPv4 adresi (`10.20.30.40`); `password`, `şifre`, `token`, `secret`, `api key` gibi bir anahtar adına atanmış, rakam ya da sembol içeren ≥6 karakterlik değer (`SMTP_SIFRE=...`, `password: ...`), bilinen token biçimleri (GitHub, AWS, JWT, Slack) ve PEM özel anahtar başlığı. Sözcüklerin kendisi serbesttir; "Şifre en az 8 karakter olmalı" ya da tablodaki `SMTP_SIFRE` satırı bulgu değildir. Metinde:
 
 * IP yerine rol/ortam adı: "veritabanı sunucusu (`DB_HOST`)".
 * Değişken adını yazın, değeri değil: `SMTP_SIFRE=${SMTP_SIFRE}`, `password: "***"`.
