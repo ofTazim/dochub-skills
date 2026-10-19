@@ -1,0 +1,14 @@
+{
+  "name": "dochub-skills",
+  "description": "DocHub skill paketi: ürün repo'larında DocHub uyumlu dokümantasyon üretimi ve bakımı.",
+  "owner": {
+    "name": "DocHub"
+  },
+  "plugins": [
+    {
+      "name": "dochub",
+      "source": "./",
+      "description": "Repo'dan DocHub dokümantasyonu üretir, günceller, changelog yazar ve doğrular."
+    }
+  ]
+}

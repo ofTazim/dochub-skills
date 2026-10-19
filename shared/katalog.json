@@ -1,0 +1,206 @@
+{
+  "surum": "1.1.0",
+  "dosyaTabanliTipler": [
+    "09",
+    "10",
+    "13",
+    "14",
+    "15"
+  ],
+  "tipler": [
+    {
+      "no": "01",
+      "ad": "Modül - Özellik Seti",
+      "slug": "modul-ozellik-seti",
+      "amac": "Modül - Özellik Seti dokümanı.",
+      "zorunluBasliklar": [
+        "Modül listesi",
+        "Modül başına özellik tablosu",
+        "Bağımlılıklar",
+        "Bu ürün neyi yapmaz"
+      ],
+      "varsayilanGizlilik": "IcKullanim",
+      "kodIpuclari": ""
+    },
+    {
+      "no": "02",
+      "ad": "Ürün Geliştirme Dokümanı (FATAD)",
+      "slug": "urun-gelistirme-dokumani-fatad",
+      "amac": "Ürün Geliştirme Dokümanı (FATAD) dokümanı.",
+      "zorunluBasliklar": [
+        "İş ihtiyacı",
+        "Gereksinimler (ID'li)",
+        "İş kuralları",
+        "Kabul kriterleri",
+        "Riskler ve açık sorular"
+      ],
+      "varsayilanGizlilik": "Gizli",
+      "kodIpuclari": ""
+    },
+    {
+      "no": "03",
+      "ad": "Sistem Dizayn Dokümanı",
+      "slug": "sistem-dizayn-dokumani",
+      "amac": "Sistem Dizayn Dokümanı dokümanı.",
+      "zorunluBasliklar": [
+        "Mimari diyagram",
+        "Bileşenler ve sorumlulukları",
+        "Veri modeli",
+        "Arayüzler",
+        "Teknik kararlar"
+      ],
+      "varsayilanGizlilik": "Gizli",
+      "kodIpuclari": "- Modül/katman yapısı: üst düzey klasörler, çözüm (.sln) ve proje dosyaları (.csproj, package.json, pom.xml)\n- Veri modeli: entity/model sınıfları, DbContext, şema dosyaları\n- Migration klasörleri ve veritabanı betikleri\n- Bağımlılıklar: paket yöneticisi dosyaları (csproj, package.json, requirements.txt), servisler arası istemciler"
+    },
+    {
+      "no": "04",
+      "ad": "Topoloji",
+      "slug": "topoloji",
+      "amac": "Topoloji dokümanı.",
+      "zorunluBasliklar": [
+        "Ortamlar",
+        "Topoloji diyagramı",
+        "Sunucu ve servis envanteri",
+        "Port matrisi",
+        "Yedeklilik"
+      ],
+      "varsayilanGizlilik": "Gizli",
+      "kodIpuclari": "- Deploy ve Kubernetes tanımları (deploy/, k8s/, manifest dosyaları)\n- Ortam tanımları (appsettings.*.json, .env.example, ortam değişkeni listeleri)\n- Ağ ve port bilgisi: Dockerfile EXPOSE, compose ports, Service/Ingress tanımları"
+    },
+    {
+      "no": "05",
+      "ad": "Test Senaryoları",
+      "slug": "test-senaryolari",
+      "amac": "Test Senaryoları dokümanı.",
+      "zorunluBasliklar": [
+        "Test kapsamı",
+        "Gereksinim–senaryo eşleşmesi",
+        "Senaryo tablosu",
+        "Çıkış kriterleri"
+      ],
+      "varsayilanGizlilik": "Gizli",
+      "kodIpuclari": ""
+    },
+    {
+      "no": "06",
+      "ad": "Test Otomasyonu Dokümanları",
+      "slug": "test-otomasyonu-dokumanlari",
+      "amac": "Test Otomasyonu Dokümanları dokümanı.",
+      "zorunluBasliklar": [
+        "Otomasyon kapsamı",
+        "Repo ve çalıştırma",
+        "CI/CD bağlantısı",
+        "Senaryo envanteri",
+        "Bakım sahibi"
+      ],
+      "varsayilanGizlilik": "Gizli",
+      "kodIpuclari": "- Test projeleri ve klasörleri (tests/, *.Tests, __tests__, e2e/)\n- Test çatısı yapılandırması (xunit, jest, vitest, playwright, cypress)\n- CI pipeline dosyaları (.github/workflows, azure-pipelines.yml, Jenkinsfile) ve test adımları"
+    },
+    {
+      "no": "07",
+      "ad": "Kurulum Dokümanı",
+      "slug": "kurulum-dokumani",
+      "amac": "Kurulum Dokümanı dokümanı.",
+      "zorunluBasliklar": [
+        "Önkoşullar",
+        "Kurulum adımları",
+        "Konfigürasyon parametreleri",
+        "Doğrulama",
+        "Geri alma",
+        "Sık karşılaşılan hatalar"
+      ],
+      "varsayilanGizlilik": "Kisitli",
+      "kodIpuclari": "- Dockerfile ve docker-compose dosyaları\n- deploy/ ve Kubernetes manifestleri, Helm chart'ları (Chart.yaml, values.yaml)\n- appsettings.json ve .env.example (gerçek .env dosyasını okuma/kopyalama)\n- Kurulum betikleri (scripts/, Makefile)"
+    },
+    {
+      "no": "08",
+      "ad": "Kurulum Topolojisi",
+      "slug": "kurulum-topolojisi",
+      "amac": "Kurulum Topolojisi dokümanı.",
+      "zorunluBasliklar": [
+        "Dağıtım seçenekleri",
+        "Referans diyagram",
+        "Bileşen gereksinimleri",
+        "Boyutlandırma",
+        "Ağ ve port gereksinimleri"
+      ],
+      "varsayilanGizlilik": "Kisitli",
+      "kodIpuclari": "- docker-compose, Kubernetes ve Helm ile görülen topoloji (servisler, replikalar, bağımlılıklar)\n- Kaynak gereksinimleri: resources.requests/limits, volume ve depolama tanımları\n- Port ve ağ tanımları (Service, Ingress, compose networks)"
+    },
+    {
+      "no": "11",
+      "ad": "Güvenlik Dokümanları",
+      "slug": "guvenlik-dokumanlari",
+      "amac": "Güvenlik Dokümanları dokümanı.",
+      "zorunluBasliklar": [
+        "Kimlik ve erişim",
+        "Veri koruma",
+        "Loglama",
+        "Açık yönetim süreci",
+        "Uyum ve sertifikalar",
+        "Sorumluluk paylaşımı"
+      ],
+      "varsayilanGizlilik": "Kisitli",
+      "kodIpuclari": "- Kimlik doğrulama / yetkilendirme middleware'leri ve politikaları (auth, JWT, OIDC, rol/policy tanımları)\n- Şifreleme ve anahtar yönetimi (veri koruma, TLS ayarları; anahtar/parola değerlerini yazma)\n- Loglama ve maskeleme ayarları\n- Güvenlik başlıkları, CORS, rate limit yapılandırması"
+    },
+    {
+      "no": "12",
+      "ad": "Ürün Roadmapi",
+      "slug": "urun-roadmapi",
+      "amac": "Ürün Roadmapi dokümanı.",
+      "zorunluBasliklar": [
+        "Şimdi",
+        "Sıradaki",
+        "Sonra",
+        "Bu dönem yapılmayacaklar"
+      ],
+      "varsayilanGizlilik": "Kisitli",
+      "kodIpuclari": ""
+    },
+    {
+      "no": "16",
+      "ad": "Entegrasyon Kılavuzu",
+      "slug": "entegrasyon-kilavuzu",
+      "amac": "Entegrasyon Kılavuzu dokümanı.",
+      "zorunluBasliklar": [
+        "Hızlı başlangıç",
+        "Ortamlar ve kimlik doğrulama",
+        "Endpoint tablosu",
+        "Hata kodları",
+        "Sürümleme"
+      ],
+      "varsayilanGizlilik": "Kisitli",
+      "kodIpuclari": "- OpenAPI/Swagger tanımları (openapi.json, swagger.yaml)\n- Controller ve endpoint tanımları (route'lar, HTTP metotları)\n- İstemci SDK'ları ve örnek çağrılar\n- Hata kodları ve hata modeli (ProblemDetails, error enum'ları)"
+    },
+    {
+      "no": "17",
+      "ad": "Kullanım Kılavuzu",
+      "slug": "kullanim-kilavuzu",
+      "amac": "Kullanım Kılavuzu dokümanı.",
+      "zorunluBasliklar": [
+        "Kimler için",
+        "Başlarken",
+        "Görev akışları",
+        "Hata mesajları",
+        "SSS"
+      ],
+      "varsayilanGizlilik": "Acik",
+      "kodIpuclari": ""
+    },
+    {
+      "no": "18",
+      "ad": "Release Notları",
+      "slug": "release-notlari",
+      "amac": "Release Notları dokümanı.",
+      "zorunluBasliklar": [
+        "Sürüm künyesi",
+        "Yenilikler",
+        "Düzeltilen sorunlar",
+        "Kırıcı değişiklikler",
+        "Bilinen sorunlar"
+      ],
+      "varsayilanGizlilik": "Acik",
+      "kodIpuclari": "- Git etiketleri (git tag, git describe)\n- Commit geçmişi (son etiketten bu yana)\n- PR başlıkları ve birleştirme commit'leri"
+    }
+  ]
+}

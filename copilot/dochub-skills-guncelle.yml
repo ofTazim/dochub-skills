@@ -1,0 +1,77 @@
+# DocHub skill paketini bu repoda güncel tutar (GitHub Copilot ve diğer ajanlar için).
+# Kurulum: bu dosyayı ürün repo'sunda `.github/workflows/dochub-skills-guncelle.yml` olarak kaydedin.
+#
+# Gerekenler:
+#  - Organizasyon (ya da repo) secret'ı `DOCHUB_SKILLS_TOKEN`: `ofTazim/dochub-skills` repo'sunu okuyabilen
+#    ince ayarlı (fine-grained) token — yalnız bu repo, yalnız "Contents: Read-only".
+#    Token yerine bir GitHub App kurulum token'ı üreten adım (ör. actions/create-github-app-token) da kullanılabilir;
+#    o durumda aşağıdaki `token:` satırını o adımın çıktısına bağlayın.
+#  - Not: GITHUB_TOKEN ile açılan PR'lar başka workflow'ları (ör. CI doğrulaması) tetiklemez; PR'da doğrulamayı elle çalıştırın
+#    ya da PR'ı bir GitHub App token'ıyla açın (yukarıdaki `token:` yerine `GH_TOKEN` için de App token'ı kullanılabilir).
+#  - Repo ayarlarında Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests" açık olmalı.
+#
+# Sonuç: skill'ler `.github/skills/<skill>/`, ortak dosyalar `.github/shared/` altına kopyalanır
+# (skill'lerin `../../shared/…` başvuruları bu düzende çözülür). Değişiklik varsa PR açılır; PR'ı gözden geçirip birleştirin.
+# Not: Copilot'un skill klasörünü okuduğu yol (`.github/skills/`) kullandığınız Copilot sürümünde doğrulanmalıdır.
+name: DocHub skill paketini güncelle
+
+on:
+  schedule:
+    - cron: "17 5 * * 1" # her Pazartesi 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ürün repo'sunu çek
+        uses: actions/checkout@v4
+
+      - name: Skill paketini çek
+        uses: actions/checkout@v4
+        with:
+          repository: ofTazim/dochub-skills
+          ref: main
+          token: ${{ secrets.DOCHUB_SKILLS_TOKEN }}
+          persist-credentials: false
+          path: .dochub-skills-kaynak
+
+      - name: Skill dosyalarını kopyala
+        run: |
+          set -euo pipefail
+          kaynak=.dochub-skills-kaynak
+          # Yalnız DocHub'a ait klasörler yenilenir; ekibin kendi skill'lerine dokunulmaz.
+          mkdir -p .github/skills
+          rm -rf .github/skills/dochub-* .github/shared
+          cp -R "$kaynak"/skills/. .github/skills/
+          cp -R "$kaynak"/shared .github/shared
+          cp "$kaynak"/SURUM .github/shared/SURUM
+          echo "SURUM=$(head -n 1 "$kaynak"/SURUM)" >> "$GITHUB_ENV"
+
+      - name: Değişiklik varsa PR aç
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git add .github/skills .github/shared
+          if git diff --cached --quiet; then
+            echo "Skill paketi zaten güncel ($SURUM)."
+            exit 0
+          fi
+          dal=chore/dochub-skills-guncelle
+          git config user.name "dochub-skills[bot]"
+          git config user.email "dochub-skills@users.noreply.github.com"
+          git checkout -B "$dal"
+          git commit -m "chore: DocHub skill paketini güncelle ($SURUM)"
+          git push --force origin "$dal"
+          govde="DocHub skill paketi $SURUM sürümüne güncellendi. Değişen dosyaları gözden geçirip birleştirin."
+          acik=$(gh pr list --head "$dal" --state open --json number --jq length)
+          if [ "$acik" -gt 0 ]; then
+            gh pr edit "$dal" --title "DocHub skill paketini güncelle ($SURUM)" --body "$govde"
+          else
+            gh pr create --base "$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)" --head "$dal" --title "DocHub skill paketini güncelle ($SURUM)" --body "$govde"
+          fi
