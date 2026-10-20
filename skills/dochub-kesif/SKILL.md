@@ -1,7 +1,7 @@
 ---
 name: dochub-kesif
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 description: "Repo'yu tarayıp koddan üretilebilecek DocHub doküman tiplerini kanıt dosyalarıyla listeler ve dochub.yaml önerir; onay olmadan dosya yazmaz. Kullan: dokümantasyona yeni başlarken, 'hangi dokümanları yazabiliriz', 'repo'yu incele', 'dochub.yaml oluştur' denince. Use for DocHub documentation discovery: scan a repository, detect which document types (architecture, deployment, security, API, tests, release notes) can be generated from code, propose dochub.yaml."
 ---
 
@@ -24,7 +24,7 @@ Bu skill **yalnız okur ve önerir**. Dosya yazmak `dochub-iskelet` skill'inin i
 
 ### 1. Katalog ve mevcut durum
 
-1. `../../shared/katalog.json` dosyasını okuyun: `tipler` listesi koddan üretilebilen (repo'ya uygun) tiplerin numarasını, adını, amacını, zorunlu başlıklarını ve `kodIpuclari` alanını verir. `dosyaTabanliTipler` listesindeki tipler repo'dan beslenemez; **bunları asla önermeyin**.
+1. `../../shared/katalog.json` dosyasını okuyun: `tipler` listesi koddan üretilebilen (repo'ya uygun) tiplerin numarasını, adını, amacını, zorunlu başlıklarını, `kodIpuclari` alanını, `derinlik` (`Ozet` | `Standart` | `Kapsamli`) ve `kapsamaKurali` alanlarını verir. `dosyaTabanliTipler` listesindeki tipler repo'dan beslenemez; **bunları asla önermeyin**.
 2. Repo kökünde `dochub.yaml` var mı bakın. Varsa içeriğini okuyun ve 5. adımdaki fark akışını izleyin.
 3. `git rev-parse --show-toplevel` ile repo kökünü doğrulayın; alt klasörde çalışıyorsanız kullanıcıya hangi kökün esas alınacağını söyleyin.
 
@@ -68,15 +68,17 @@ Hiç kanıt bulunamayan tipi listelemeyin (isterseniz tablonun altında tek sat�
 
 Önce şu tabloyu verin:
 
-| Tip | Ad | Güven | Kanıt dosyaları | Önerilen klasör |
-|---|---|---|---|---|
-| 07 | … | Yüksek | `Dockerfile`, `docker-compose.yml` | `docs/kurulum` |
+| Tip | Ad | Derinlik | Güven | Kanıt dosyaları | Önerilen klasör |
+|---|---|---|---|---|---|
+| 07 | … | Kapsamlı | Yüksek | `Dockerfile`, `docker-compose.yml` | `dochub/kurulum-dokumani` |
 
 Kurallar:
 
-* Klasör önerileri repo'nun mevcut düzenine uysun (zaten `docs/` varsa onu kullanın); yol göreli olmalı, `..` ve mutlak yol olmamalı, aynı klasör iki tipe verilmemeli.
+* **Derinlik** sütunu katalogdaki `derinlik` değerinden gelir (`Ozet` → Özet, `Standart`, `Kapsamli` → Kapsamlı); kendiniz tahmin etmeyin.
+* **Kapsamlı** tiplerde tablonun altında, tip başına kapsama kuralındaki (`../../shared/tipler/<NN>-<slug>.md` "Derinlik ve kapsama") birimlerden **kodda bulduğunuz tahmini sayıyı** yazın (ör. "17 · Kullanım Kılavuzu: ~24 ekran/route, ~6 görev akışı"). Sayıyı dosya adı desenleri ve route/endpoint tanımları üzerinden kabaca sayarak bulun; içerik okumadan kesin sayı iddia etmeyin.
+* Klasör önerileri varsayılan olarak `dochub/<tip-slug>` biçimindedir (ör. `dochub/kurulum-dokumani`); changelog (tip 18) için `dochub/changelog`. Repo'daki mevcut `docs/` ve benzeri klasörler **yeniden kullanılmaz**; DocHub içeriği bu klasörde ayrı tutulur. Yol göreli olmalı, `..` ve mutlak yol olmamalı, aynı klasör iki tipe verilmemeli.
 * Bir tip yalnız bir klasörden beslenir; aynı tipi iki kez önermeyin.
-* Changelog (tip 18) için git etiketi ya da sürüm geçmişi varsa `changelog` klasörünü önerin.
+* Changelog (tip 18) için git etiketi ya da sürüm geçmişi varsa `dochub/changelog` klasörünü önerin.
 * Her satırda kanıt dosyalarını **yol olarak** yazın; dosya içeriğini (özellikle yapılandırma dosyalarını) rapora kopyalamayın.
 
 Ardından önerilen `dochub.yaml` taslağını verin:
@@ -86,7 +88,7 @@ surum: 1
 urun: <Ürün adı>
 dokumanlar:
   - tip: "07"
-    klasor: docs/kurulum
+    klasor: dochub/kurulum-dokumani
     otomatik: true
     kaynaklar: [Dockerfile, "docker-compose*.yml", "deploy/k8s/**"]
 ```
@@ -101,7 +103,7 @@ Dosyayı sıfırdan yazmayın; farkı gösterin:
 
 * **Eklenebilecek tipler:** repo'da kanıtı olup beyanda olmayanlar.
 * **Dikkat edilecekler:** beyan edilmiş ama klasörü/`README.md`'si olmayan tipler; `kaynaklar` glob'ları artık hiçbir dosyayla eşleşmeyenler.
-* **Dokunulmayacaklar:** kullanıcının elle seçtiği klasör adları ve `otomatik` değerleri.
+* **Dokunulmayacaklar:** kullanıcının elle seçtiği klasör adları ve `otomatik` değerleri. `dochub/` altında olmayan beyan klasörleri için yalnızca bilgi verin (`dochub-dogrula` `klasor-yeri` uyarısı verir); taşımayı kullanıcı karar verir.
 
 ### 6. Onay kapısı
 
@@ -119,6 +121,8 @@ Raporun sonunda şunu sorun ve **cevabı bekleyin**:
 * Kanıt göstermeden tip önermek ya da kanıt dosyasının içeriğini rapora yapıştırmak.
 * `.env`, anahtar dosyaları ve üretim yapılandırmalarını kanıt diye açmak.
 * Künye bilgisini (gizlilik, persona, sahip) öneriye eklemek.
+* Klasör olarak mevcut `docs/` ya da kök `changelog/` önermek (varsayılan `dochub/...`).
+* Kapsamlı tipte derinliği belirtmemek veya kapsama birimi sayısını kanıtsız yazmak.
 * Onay beklemeden `dochub.yaml` yazmak.
 
 ## Başvurular

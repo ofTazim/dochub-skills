@@ -1,7 +1,7 @@
 ---
 name: dochub-changelog
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 description: "DocHub dokümantasyonu için son sürüm etiketinden bu yana commit ve PR başlıklarından changelog sürüm sayfası yazar (ön madde surum/tarih/etiketler; Yenilikler, Düzeltilen sorunlar, Kırıcı değişiklikler) ve SUMMARY.md'ye ekler. Kullan: 'sürüm notu yaz', 'release notes', changelog, 'yeni sürüm yayınlıyoruz'. Use to write a DocHub documentation changelog / release notes page from git history since the last tag, with front matter (surum, tarih YYYY-MM-DD, etiketler) and SUMMARY.md update."
 ---
 
@@ -38,7 +38,7 @@ git log --merges --format='%h %s' <son-etiket>..HEAD   # PR birleştirmeleri
 * Changelog zaman çizelgesinde **yalnız ön maddesinde `surum` olan sayfalar** sürüm olarak görünür; `SUMMARY.md` grupları (`## Grup`) hiçbir zaman sürüm sayılmaz. Changelog klasörünün `README.md` dosyası serbest bir giriş metnidir (zorunlu başlık yoktur); sürüm sayfası değildir.
 * Tarih `YYYY-AA-GG` ve geçerli bir takvim günü olmalıdır (`2026-10-16`). `15.10.2026` ya da `2026-13-01` gibi geçersiz tarih DocHub'da **reddedilmez, yok sayılır**: sürüm yayın/senkron tarihiyle kaydedilir ve sürüm sıralaması değişir. Doğrulama betiği bunu `changelog-onmadde` hatası olarak bildirir.
 * Sayfanın H1 başlığı, `SUMMARY.md`'deki bağlantı metniyle **aynı** olmalıdır; DocHub'da başlık `SUMMARY.md`'den gelir.
-* Dosya yolu: `<changelog klasörü>/<surum>.md` (ör. `changelog/1.4.0.md`). Klasör `dochub.yaml`'daki tip 18 beyanından gelir. Aynı dosya varsa üzerine yazmayın; kullanıcıya sorun.
+* Dosya yolu: `<changelog klasörü>/<surum>.md` (ör. `dochub/changelog/1.4.0.md`). Klasör `dochub.yaml`'daki tip 18 beyanından gelir. Aynı dosya varsa üzerine yazmayın; kullanıcıya sorun.
 
 ### 3. Commit'leri sınıflandırın
 

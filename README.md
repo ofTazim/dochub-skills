@@ -3,27 +3,28 @@
 Ürün repo'nuzda **DocHub uyumlu dokümantasyonu** üreten ve güncel tutan skill'ler. Claude Code ve GitHub Copilot ile çalışır.
 Bu repo DocHub tarafından üretilir ve yayınlanır; dosyaları elle düzenlemeyin, yapılandırmayı DocHub'dan değiştirin.
 
-- Paket sürümü: `1.2.0`
-- Yapılandırma özeti: `377e89862b479c7efa733f6c6609b721198e1a3cd5271ae5babba7df02943e10`
+- Paket sürümü: `1.3.0`
+- Yapılandırma özeti: `bff023e698a9eb9f17292db05cb84adf71ae4bb8af7915cc4b139c07b3c76c02`
 - Kapsanan doküman tipi sayısı: 13
 
 ## Nasıl çalışır?
 
 DocHub, repo'nuzun kökündeki `dochub.yaml` dosyasını okur; beyan edilen her klasör bir doküman tipinin kök dokümanıdır
-(`README.md`), alt sayfa ağacı `SUMMARY.md` ile belirlenir. Skill'ler bu yapıyı kurar, koddan içerik üretir ve değişiklikten sonra güncel tutar.
+(`README.md`), alt sayfa ağacı `SUMMARY.md` ile belirlenir.
+Skill'ler içeriği `dochub/<tip-slug>/` ve `dochub/changelog/` altına yazar (mevcut `docs/` ve diğer doküman araçlarıyla çakışmaz); `dochub.yaml` repo kökünde kalır, ortak görsel ve include'lar `dochub/.gitbook/` altındadır. Her tipin bir **derinliği** vardır (Özet, Standart, Kapsamlı); Kapsamlı tiplerde (ör. Kullanım Kılavuzu) skill'ler önce koddan bir kapsama envanteri (`.kapsam.yaml`) çıkarır, her birimi yazar ve sonunda kapsama raporu verir. Skill'ler bu yapıyı kurar, koddan içerik üretir ve değişiklikten sonra güncel tutar.
 Künye bilgileri (persona, gizlilik, sahip, reviewer, onaylayan) repo'da tutulmaz; DocHub'da yönetilir.
 
 ## Skill'ler
 
 | Skill | Ne zaman kullanılır |
 |---|---|
-| `dochub-kesif` | Repo'dan hangi doküman tiplerinin üretilebileceğini kanıt dosyalarıyla bulur, `dochub.yaml` önerir. |
-| `dochub-iskelet` | Onaylanan tipler için klasör, `README.md` (zorunlu başlıklarla), `SUMMARY.md` ve changelog klasörünü kurar. |
-| `dochub-uret` | Koddan doküman içeriği üretir; şablona ve yazım rehberine uyar. |
-| `dochub-guncelle` | Commit/PR farkına göre etkilenen dokümanları bulur ve yalnız ilgili bölümleri günceller. |
+| `dochub-kesif` | Repo'dan hangi doküman tiplerinin üretilebileceğini kanıt dosyalarıyla ve derinliğiyle bulur, `dochub.yaml` önerir (`dochub/<tip-slug>` klasörleriyle). |
+| `dochub-iskelet` | Onaylanan tipler için `dochub/` altında klasör, `README.md` (zorunlu başlıklarla), `SUMMARY.md`, changelog klasörünü ve Kapsamlı tiplerde `.kapsam.yaml` iskeletini kurar. |
+| `dochub-uret` | Koddan doküman içeriği üretir; şablona, yazım rehberine ve tipin derinliğine uyar (Kapsamlı tipte envanter + kapsama raporu). |
+| `dochub-guncelle` | Commit/PR farkına göre etkilenen dokümanları bulur ve yalnız ilgili bölümleri günceller; `.kapsam.yaml` envanterini sürdürür. |
 | `dochub-changelog` | Son sürümden bu yana yapılan değişikliklerden sürüm sayfası yazar. |
 | `dochub-yaz` | Yazım kuralları ve DocHub'ın desteklediği GitBook blokları başvurusu. |
-| `dochub-dogrula` | `dochub.yaml`, zorunlu başlıklar, SUMMARY tutarlılığı, hassas bilgi, include/görsel/bağlantı hedefleri ve blok dengesini denetler. |
+| `dochub-dogrula` | `dochub.yaml`, zorunlu başlıklar, SUMMARY tutarlılığı, hassas bilgi, include/görsel/bağlantı hedefleri, blok dengesini, kapsama envanterini (`kapsam`) ve klasör konumunu (`klasor-yeri`) denetler. |
 
 Önerilen akış: `dochub-kesif` → `dochub-iskelet` → `dochub-uret` → (her değişiklikte) `dochub-guncelle` ve sürümlerde `dochub-changelog`.
 Her üretim ve güncelleme `dochub-dogrula` ile biter.
@@ -31,7 +32,7 @@ Her üretim ve güncelleme `dochub-dogrula` ile biter.
 ## Başlarken (ürün ekibi)
 
 1. Plugin'i kurun (aşağıdaki **Kurulum**; ekip için `.claude/settings.json` önerilir).
-2. Repo'da Claude Code'a "dokümantasyona başlayalım" deyin: `dochub-kesif` önerisini onaylayın, `dochub-iskelet` ve `dochub-uret` dokümanları yazar.
+2. Repo'da Claude Code'a "dokümantasyona başlayalım" deyin: `dochub-kesif` önerisini (tip, derinlik, `dochub/<tip-slug>` klasörleri) onaylayın, `dochub-iskelet` ve `dochub-uret` dokümanları `dochub/` altına yazar. Kapsamlı tiplerde `dochub-uret` önce envanteri çıkarır; sonunda kapsama raporuna (kapsanan / eksik / kapsam dışı) bakın.
 3. `dochub.yaml` içindeki `urun` adının DocHub'daki ürün adıyla birebir aynı olduğunu kontrol edin, değişikliği PR ile ana dala alın.
 4. DocHub yöneticisinden repo'nun GitHub App kurulumuna eklenmesini ve ürün sayfasında **GitHub bağlantısı**nın açılmasını isteyin. Dokümanlar taslak olarak gelir; künyeyi DocHub'da doldurup onaya gönderin.
 
@@ -45,7 +46,7 @@ Her üretim ve güncelleme `dochub-dogrula` ile biter.
 Kod değiştiren her iş PR açılmadan önce:
 1. `dochub-guncelle` ile dalın ana dala göre farkından etkilenen dokümanları güncelle.
 2. Kullanıcıya görünür değişiklikse `dochub-changelog` ile sürüm sayfası ekle.
-3. `dochub-dogrula` hatasız geçmeli; doküman değişiklikleri kodla aynı PR'a girer.
+3. `dochub-dogrula` hatasız geçmeli (`kapsam` ve `klasor-yeri` uyarılarına da bakın); doküman değişiklikleri kodla aynı PR'a girer.
 ```
 
 ## Kurulum
@@ -88,7 +89,7 @@ node skills/dochub-dogrula/scripts/dochub-dogrula.mjs . --json # makine okunur �
 ```
 
 Node 18 veya üstü gerekir; bağımlılık yoktur. Copilot kopyasında yol `.github/skills/dochub-dogrula/scripts/dochub-dogrula.mjs` olur.
-Çıkış kodu 0 ise tüm kurallar geçmiştir; CI'da doğrudan kullanılabilir.
+Çıkış kodu 0 ise tüm kurallar geçmiştir; CI'da doğrudan kullanılabilir. Uyarılar (`[UYARI]`: `kapsam`, `klasor-yeri`, `changelog-baslik`) çıkış kodunu etkilemez.
 
 ## Doküman tipleri
 
@@ -108,7 +109,7 @@ Node 18 veya üstü gerekir; bağımlılık yoktur. Copilot kopyasında yol `.gi
 | 17 | Kullanım Kılavuzu | Son kullanıcının ürünü kullanmasını sağlar: kimler için olduğunu, başlarken adımlarını, görev akışlarını, hata mesajlarını ve sık sorulan soruları anlatır. Teknik tasarım, kurulum ya da yönetici konfigürasyonu içermez; uzun kılavuzlar modül başına alt sayfalara bölünür. | Kimler için, Başlarken, Görev akışları, Hata mesajları, SSS | shared/tipler/17-kullanim-kilavuzu.md |
 | 18 | Release Notları | Bir sürümde gelen yenilikleri, düzeltilen sorunları, kırıcı değişiklikleri ve bilinen sorunları müşteri ve satış için duyurur. Plan ya da roadmap maddesi, iç teknik tartışma ve gizli bilgi içermez; her madde kullanıcıya etkisi açısından yazılır. | Sürüm künyesi, Yenilikler, Düzeltilen sorunlar, Kırıcı değişiklikler, Bilinen sorunlar | shared/tipler/18-release-notlari.md |
 
-Ayrıntılar: `shared/tipler/`. `dochub.yaml` sözleşmesi: `shared/dochub-yaml.md`.
+Ayrıntılar (derinlik ve kapsama kuralı dahil): `shared/tipler/`. `dochub.yaml` sözleşmesi ve `.kapsam.yaml` biçimi: `shared/dochub-yaml.md`.
 
 ## Ortak ilkeler
 

@@ -3,13 +3,13 @@
 // Kurallar DocHub'ın RepoSozlesmesi (dochub.yaml) ve DokumanKurallari (içerik) sınıflarıyla aynı sonucu verir.
 // Kullanım: node dochub-dogrula.mjs [kök] [--json] [--katalog dosya.json]
 // Çıkış kodu: 0 = tüm kurallar geçti, 1 = en az bir kural kaldı, 2 = kullanım/katalog hatası.
-// Paket sürümü: 1.2.0
+// Paket sürümü: 1.3.0
 import { existsSync, lstatSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 // Üretici bu yer tutucuyu katalog JSON'u ile değiştirir (bkz. skill-paketi/YER_TUTUCULAR.md).
-const GOMULU_KATALOG = {"surum":"1.2.0","dosyaTabanliTipler":["09","10","13","14","15"],"tipler":[{"no":"01","ad":"Modül - Özellik Seti","slug":"modul-ozellik-seti","amac":"Ürünün modüllerini ve her modülün sunduğu özellikleri, bağımlılıklarıyla birlikte ve ürünün neyi yapmadığını da belirterek anlatır; ürün yöneticileri, satış ve ortaklar için hazırlanır. Teknik tasarım, kurulum ya da test ayrıntısı ile künye bilgisi (sahip, persona, gizlilik) içermez.","zorunluBasliklar":["Modül listesi","Modül başına özellik tablosu","Bağımlılıklar","Bu ürün neyi yapmaz"],"varsayilanGizlilik":"IcKullanim","kodIpuclari":""},{"no":"02","ad":"Ürün Geliştirme Dokümanı (FATAD)","slug":"urun-gelistirme-dokumani-fatad","amac":"Özelliğin iş ihtiyacını, gereksinimlerini, kabul kriterlerini ve risklerini yazılımcı, analist ve test mühendisi için toplar. Gereksinimler ID'li (ör. `GRK-01`) ve test edilebilir yazılır; örnek: \"Yanıt süresi 2 saniyenin altında olmalıdır\", \"Sistem hızlı olmalıdır\" değil. Mimari ve künye içermez.","zorunluBasliklar":["İş ihtiyacı","Gereksinimler (ID'li)","İş kuralları","Kabul kriterleri","Riskler ve açık sorular"],"varsayilanGizlilik":"Gizli","kodIpuclari":""},{"no":"03","ad":"Sistem Dizayn Dokümanı","slug":"sistem-dizayn-dokumani","amac":"Sistemin mimarisini, bileşenlerini ve sorumluluklarını, veri modelini, arayüzlerini ve alınan teknik kararları yazılımcı, analist ve test mühendisine anlatır. Gereksinim listesi, kurulum adımı ya da ortam envanteri içermez; bunlar FATAD, Kurulum ve Topoloji dokümanlarında yer alır.","zorunluBasliklar":["Mimari diyagram","Bileşenler ve sorumlulukları","Veri modeli","Arayüzler","Teknik kararlar"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Modül/katman yapısı: üst düzey klasörler, çözüm (.sln) ve proje dosyaları (.csproj, package.json, pom.xml)\n- Veri modeli: entity/model sınıfları, DbContext, şema dosyaları\n- Migration klasörleri ve veritabanı betikleri\n- Bağımlılıklar: paket yöneticisi dosyaları (csproj, package.json, requirements.txt), servisler arası istemciler"},{"no":"04","ad":"Topoloji","slug":"topoloji","amac":"Ortamları, sunucu ve servis envanterini, port matrisini ve yedeklilik yapısını topoloji diyagramıyla yazılımcı ve mimarlar için gösterir. Kurulum adımı, boyutlandırma rehberi ya da gerçek parola ve IP adresi içermez; künye bilgisi yan panelde tutulur.","zorunluBasliklar":["Ortamlar","Topoloji diyagramı","Sunucu ve servis envanteri","Port matrisi","Yedeklilik"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Deploy ve Kubernetes tanımları (deploy/, k8s/, manifest dosyaları)\n- Ortam tanımları (appsettings.*.json, .env.example, ortam değişkeni listeleri)\n- Ağ ve port bilgisi: Dockerfile EXPOSE, compose ports, Service/Ingress tanımları"},{"no":"05","ad":"Test Senaryoları","slug":"test-senaryolari","amac":"Test kapsamını, gereksinim ile senaryo eşleşmesini, senaryo tablosunu ve çıkış kriterlerini test mühendisleri için yazar. Gereksinimin kendisini ya da otomasyon kodunun ayrıntısını içermez; her senaryo bir gereksinime bağlanır.","zorunluBasliklar":["Test kapsamı","Gereksinim–senaryo eşleşmesi","Senaryo tablosu","Çıkış kriterleri"],"varsayilanGizlilik":"Gizli","kodIpuclari":""},{"no":"06","ad":"Test Otomasyonu Dokümanları","slug":"test-otomasyonu-dokumanlari","amac":"Otomasyonun kapsamını, repo ve çalıştırma bilgisini, CI/CD bağlantısını, senaryo envanterini ve bakım sahibini test mühendisleri için anlatır. Manuel test senaryolarını ya da gerçek kimlik bilgilerini içermez; gizli değerler için değişken adı veya yer tutucu kullanılır.","zorunluBasliklar":["Otomasyon kapsamı","Repo ve çalıştırma","CI/CD bağlantısı","Senaryo envanteri","Bakım sahibi"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Test projeleri ve klasörleri (tests/, *.Tests, __tests__, e2e/)\n- Test çatısı yapılandırması (xunit, jest, vitest, playwright, cypress)\n- CI pipeline dosyaları (.github/workflows, azure-pipelines.yml, Jenkinsfile) ve test adımları"},{"no":"07","ad":"Kurulum Dokümanı","slug":"kurulum-dokumani","amac":"Ürünün kurulumunu önkoşullar, sıralı adımlar, parametreler, doğrulama, geri alma ve sık hatalarla DevOps ekibi için anlatır. Gerçek parola, token ve IP adresi yazılmaz; değişken adı ya da yer tutucu kullanılır. Mimari gerekçe ve boyutlandırma Sistem Dizayn ile Kurulum Topolojisi dokümanlarındadır.","zorunluBasliklar":["Önkoşullar","Kurulum adımları","Konfigürasyon parametreleri","Doğrulama","Geri alma","Sık karşılaşılan hatalar"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- Dockerfile ve docker-compose dosyaları\n- deploy/ ve Kubernetes manifestleri, Helm chart'ları (Chart.yaml, values.yaml)\n- appsettings.json ve .env.example (gerçek .env dosyasını okuma/kopyalama)\n- Kurulum betikleri (scripts/, Makefile)"},{"no":"08","ad":"Kurulum Topolojisi","slug":"kurulum-topolojisi","amac":"Desteklenen dağıtım seçeneklerini, referans diyagramı, bileşen gereksinimlerini, boyutlandırmayı ve ağ ile port gereksinimlerini DevOps ekibi için özetler. Adım adım kurulum talimatı ya da gerçek IP adresi içermez; kurulum adımları Kurulum Dokümanı'ndadır.","zorunluBasliklar":["Dağıtım seçenekleri","Referans diyagram","Bileşen gereksinimleri","Boyutlandırma","Ağ ve port gereksinimleri"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- docker-compose, Kubernetes ve Helm ile görülen topoloji (servisler, replikalar, bağımlılıklar)\n- Kaynak gereksinimleri: resources.requests/limits, volume ve depolama tanımları\n- Port ve ağ tanımları (Service, Ingress, compose networks)"},{"no":"11","ad":"Güvenlik Dokümanları","slug":"guvenlik-dokumanlari","amac":"Ürünün kimlik ve erişim, veri koruma, loglama, açık yönetim süreci, uyum ve sertifikalar ile sorumluluk paylaşımı konularını güvenlik ekibi ve müşteri güvenlik ekipleri için açıklar. Gerçek parola, anahtar ve IP adresi içermez; tarama raporlarının ayrıntısı DAST ve SAST özetlerinde tutulur.","zorunluBasliklar":["Kimlik ve erişim","Veri koruma","Loglama","Açık yönetim süreci","Uyum ve sertifikalar","Sorumluluk paylaşımı"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- Kimlik doğrulama / yetkilendirme middleware'leri ve politikaları (auth, JWT, OIDC, rol/policy tanımları)\n- Şifreleme ve anahtar yönetimi (veri koruma, TLS ayarları; anahtar/parola değerlerini yazma)\n- Loglama ve maskeleme ayarları\n- Güvenlik başlıkları, CORS, rate limit yapılandırması"},{"no":"12","ad":"Ürün Roadmapi","slug":"urun-roadmapi","amac":"Ürünün Şimdi, Sıradaki ve Sonra başlıkları altındaki planını ve bu dönem yapılmayacakları ürün yöneticileri ile satış için yazar. Tarih taahhüdü, teknik tasarım ya da sürüm notu içermez; gerçekleşen değişiklikler Release Notları'nda yer alır.","zorunluBasliklar":["Şimdi","Sıradaki","Sonra","Bu dönem yapılmayacaklar"],"varsayilanGizlilik":"Kisitli","kodIpuclari":""},{"no":"16","ad":"Entegrasyon Kılavuzu","slug":"entegrasyon-kilavuzu","amac":"Ürünün API'sine bağlanmak isteyen müşteri geliştiricisi ve partner için hızlı başlangıcı, ortamları ve kimlik doğrulamayı, endpoint tablosunu, hata kodlarını ve sürümlemeyi anlatır. Örneklerde gerçek parola, token ve IP adresi yerine yer tutucu kullanılır; iç mimari ve kurulum ayrıntısı içermez.","zorunluBasliklar":["Hızlı başlangıç","Ortamlar ve kimlik doğrulama","Endpoint tablosu","Hata kodları","Sürümleme"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- OpenAPI/Swagger tanımları (openapi.json, swagger.yaml)\n- Controller ve endpoint tanımları (route'lar, HTTP metotları)\n- İstemci SDK'ları ve örnek çağrılar\n- Hata kodları ve hata modeli (ProblemDetails, error enum'ları)"},{"no":"17","ad":"Kullanım Kılavuzu","slug":"kullanim-kilavuzu","amac":"Son kullanıcının ürünü kullanmasını sağlar: kimler için olduğunu, başlarken adımlarını, görev akışlarını, hata mesajlarını ve sık sorulan soruları anlatır. Teknik tasarım, kurulum ya da yönetici konfigürasyonu içermez; uzun kılavuzlar modül başına alt sayfalara bölünür.","zorunluBasliklar":["Kimler için","Başlarken","Görev akışları","Hata mesajları","SSS"],"varsayilanGizlilik":"Acik","kodIpuclari":""},{"no":"18","ad":"Release Notları","slug":"release-notlari","amac":"Bir sürümde gelen yenilikleri, düzeltilen sorunları, kırıcı değişiklikleri ve bilinen sorunları müşteri ve satış için duyurur. Plan ya da roadmap maddesi, iç teknik tartışma ve gizli bilgi içermez; her madde kullanıcıya etkisi açısından yazılır.","zorunluBasliklar":["Sürüm künyesi","Yenilikler","Düzeltilen sorunlar","Kırıcı değişiklikler","Bilinen sorunlar"],"varsayilanGizlilik":"Acik","kodIpuclari":"- Git etiketleri (git tag, git describe)\n- Commit geçmişi (son etiketten bu yana)\n- PR başlıkları ve birleştirme commit'leri"}]};
+const GOMULU_KATALOG = {"surum":"1.3.0","dosyaTabanliTipler":["09","10","13","14","15"],"tipler":[{"no":"01","ad":"Modül - Özellik Seti","slug":"modul-ozellik-seti","amac":"Ürünün modüllerini ve her modülün sunduğu özellikleri, bağımlılıklarıyla birlikte ve ürünün neyi yapmadığını da belirterek anlatır; ürün yöneticileri, satış ve ortaklar için hazırlanır. Teknik tasarım, kurulum ya da test ayrıntısı ile künye bilgisi (sahip, persona, gizlilik) içermez.","zorunluBasliklar":["Modül listesi","Modül başına özellik tablosu","Bağımlılıklar","Bu ürün neyi yapmaz"],"varsayilanGizlilik":"IcKullanim","kodIpuclari":"","derinlik":"Kapsamli","kapsamaKurali":"Birim: her modül (proje/paket/ana menü bölümü). Her modül için: özellik tablosu (özellik, kullanıcıya faydası, durum), bağımlılıklar, sınırlar (\"bu modül neyi yapmaz\")."},{"no":"02","ad":"Ürün Geliştirme Dokümanı (FATAD)","slug":"urun-gelistirme-dokumani-fatad","amac":"Özelliğin iş ihtiyacını, gereksinimlerini, kabul kriterlerini ve risklerini yazılımcı, analist ve test mühendisi için toplar. Gereksinimler ID'li (ör. `GRK-01`) ve test edilebilir yazılır; örnek: \"Yanıt süresi 2 saniyenin altında olmalıdır\", \"Sistem hızlı olmalıdır\" değil. Mimari ve künye içermez.","zorunluBasliklar":["İş ihtiyacı","Gereksinimler (ID'li)","İş kuralları","Kabul kriterleri","Riskler ve açık sorular"],"varsayilanGizlilik":"Gizli","kodIpuclari":"","derinlik":"Standart","kapsamaKurali":""},{"no":"03","ad":"Sistem Dizayn Dokümanı","slug":"sistem-dizayn-dokumani","amac":"Sistemin mimarisini, bileşenlerini ve sorumluluklarını, veri modelini, arayüzlerini ve alınan teknik kararları yazılımcı, analist ve test mühendisine anlatır. Gereksinim listesi, kurulum adımı ya da ortam envanteri içermez; bunlar FATAD, Kurulum ve Topoloji dokümanlarında yer alır.","zorunluBasliklar":["Mimari diyagram","Bileşenler ve sorumlulukları","Veri modeli","Arayüzler","Teknik kararlar"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Modül/katman yapısı: üst düzey klasörler, çözüm (.sln) ve proje dosyaları (.csproj, package.json, pom.xml)\n- Veri modeli: entity/model sınıfları, DbContext, şema dosyaları\n- Migration klasörleri ve veritabanı betikleri\n- Bağımlılıklar: paket yöneticisi dosyaları (csproj, package.json, requirements.txt), servisler arası istemciler","derinlik":"Kapsamli","kapsamaKurali":"Birim: her bileşen/proje/modül ve her kalıcı varlık (entity/tablo). Bileşen için: sorumluluk, bağımlılıklar, arayüzler; varlık için: alanlar, ilişkiler, kısıtlar; teknik kararlar gerekçesiyle."},{"no":"04","ad":"Topoloji","slug":"topoloji","amac":"Ortamları, sunucu ve servis envanterini, port matrisini ve yedeklilik yapısını topoloji diyagramıyla yazılımcı ve mimarlar için gösterir. Kurulum adımı, boyutlandırma rehberi ya da gerçek parola ve IP adresi içermez; künye bilgisi yan panelde tutulur.","zorunluBasliklar":["Ortamlar","Topoloji diyagramı","Sunucu ve servis envanteri","Port matrisi","Yedeklilik"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Deploy ve Kubernetes tanımları (deploy/, k8s/, manifest dosyaları)\n- Ortam tanımları (appsettings.*.json, .env.example, ortam değişkeni listeleri)\n- Ağ ve port bilgisi: Dockerfile EXPOSE, compose ports, Service/Ingress tanımları","derinlik":"Standart","kapsamaKurali":""},{"no":"05","ad":"Test Senaryoları","slug":"test-senaryolari","amac":"Test kapsamını, gereksinim ile senaryo eşleşmesini, senaryo tablosunu ve çıkış kriterlerini test mühendisleri için yazar. Gereksinimin kendisini ya da otomasyon kodunun ayrıntısını içermez; her senaryo bir gereksinime bağlanır.","zorunluBasliklar":["Test kapsamı","Gereksinim–senaryo eşleşmesi","Senaryo tablosu","Çıkış kriterleri"],"varsayilanGizlilik":"Gizli","kodIpuclari":"","derinlik":"Kapsamli","kapsamaKurali":"Birim: her gereksinim/özellik (gereksinim ID'leri, özellik listesi, kullanıcıya açık uçlar). Her birim için en az bir olumlu ve bir olumsuz senaryo: ön koşul, adımlar, beklenen sonuç, gereksinim eşleşmesi."},{"no":"06","ad":"Test Otomasyonu Dokümanları","slug":"test-otomasyonu-dokumanlari","amac":"Otomasyonun kapsamını, repo ve çalıştırma bilgisini, CI/CD bağlantısını, senaryo envanterini ve bakım sahibini test mühendisleri için anlatır. Manuel test senaryolarını ya da gerçek kimlik bilgilerini içermez; gizli değerler için değişken adı veya yer tutucu kullanılır.","zorunluBasliklar":["Otomasyon kapsamı","Repo ve çalıştırma","CI/CD bağlantısı","Senaryo envanteri","Bakım sahibi"],"varsayilanGizlilik":"Gizli","kodIpuclari":"- Test projeleri ve klasörleri (tests/, *.Tests, __tests__, e2e/)\n- Test çatısı yapılandırması (xunit, jest, vitest, playwright, cypress)\n- CI pipeline dosyaları (.github/workflows, azure-pipelines.yml, Jenkinsfile) ve test adımları","derinlik":"Standart","kapsamaKurali":""},{"no":"07","ad":"Kurulum Dokümanı","slug":"kurulum-dokumani","amac":"Ürünün kurulumunu önkoşullar, sıralı adımlar, parametreler, doğrulama, geri alma ve sık hatalarla DevOps ekibi için anlatır. Gerçek parola, token ve IP adresi yazılmaz; değişken adı ya da yer tutucu kullanılır. Mimari gerekçe ve boyutlandırma Sistem Dizayn ile Kurulum Topolojisi dokümanlarındadır.","zorunluBasliklar":["Önkoşullar","Kurulum adımları","Konfigürasyon parametreleri","Doğrulama","Geri alma","Sık karşılaşılan hatalar"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- Dockerfile ve docker-compose dosyaları\n- deploy/ ve Kubernetes manifestleri, Helm chart'ları (Chart.yaml, values.yaml)\n- appsettings.json ve .env.example (gerçek .env dosyasını okuma/kopyalama)\n- Kurulum betikleri (scripts/, Makefile)","derinlik":"Kapsamli","kapsamaKurali":"Birim: her konfigürasyon parametresi (ortam değişkeni, appsettings anahtarı) ve her kurulum bileşeni/adımı. Parametre için: ad, açıklama, varsayılan, zorunlu mu, örnek (gerçek değer değil), etkisi. Adım için: komut, doğrulama, sık hata ve çözümü."},{"no":"08","ad":"Kurulum Topolojisi","slug":"kurulum-topolojisi","amac":"Desteklenen dağıtım seçeneklerini, referans diyagramı, bileşen gereksinimlerini, boyutlandırmayı ve ağ ile port gereksinimlerini DevOps ekibi için özetler. Adım adım kurulum talimatı ya da gerçek IP adresi içermez; kurulum adımları Kurulum Dokümanı'ndadır.","zorunluBasliklar":["Dağıtım seçenekleri","Referans diyagram","Bileşen gereksinimleri","Boyutlandırma","Ağ ve port gereksinimleri"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- docker-compose, Kubernetes ve Helm ile görülen topoloji (servisler, replikalar, bağımlılıklar)\n- Kaynak gereksinimleri: resources.requests/limits, volume ve depolama tanımları\n- Port ve ağ tanımları (Service, Ingress, compose networks)","derinlik":"Standart","kapsamaKurali":""},{"no":"11","ad":"Güvenlik Dokümanları","slug":"guvenlik-dokumanlari","amac":"Ürünün kimlik ve erişim, veri koruma, loglama, açık yönetim süreci, uyum ve sertifikalar ile sorumluluk paylaşımı konularını güvenlik ekibi ve müşteri güvenlik ekipleri için açıklar. Gerçek parola, anahtar ve IP adresi içermez; tarama raporlarının ayrıntısı DAST ve SAST özetlerinde tutulur.","zorunluBasliklar":["Kimlik ve erişim","Veri koruma","Loglama","Açık yönetim süreci","Uyum ve sertifikalar","Sorumluluk paylaşımı"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- Kimlik doğrulama / yetkilendirme middleware'leri ve politikaları (auth, JWT, OIDC, rol/policy tanımları)\n- Şifreleme ve anahtar yönetimi (veri koruma, TLS ayarları; anahtar/parola değerlerini yazma)\n- Loglama ve maskeleme ayarları\n- Güvenlik başlıkları, CORS, rate limit yapılandırması","derinlik":"Standart","kapsamaKurali":""},{"no":"12","ad":"Ürün Roadmapi","slug":"urun-roadmapi","amac":"Ürünün Şimdi, Sıradaki ve Sonra başlıkları altındaki planını ve bu dönem yapılmayacakları ürün yöneticileri ile satış için yazar. Tarih taahhüdü, teknik tasarım ya da sürüm notu içermez; gerçekleşen değişiklikler Release Notları'nda yer alır.","zorunluBasliklar":["Şimdi","Sıradaki","Sonra","Bu dönem yapılmayacaklar"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"","derinlik":"Standart","kapsamaKurali":""},{"no":"16","ad":"Entegrasyon Kılavuzu","slug":"entegrasyon-kilavuzu","amac":"Ürünün API'sine bağlanmak isteyen müşteri geliştiricisi ve partner için hızlı başlangıcı, ortamları ve kimlik doğrulamayı, endpoint tablosunu, hata kodlarını ve sürümlemeyi anlatır. Örneklerde gerçek parola, token ve IP adresi yerine yer tutucu kullanılır; iç mimari ve kurulum ayrıntısı içermez.","zorunluBasliklar":["Hızlı başlangıç","Ortamlar ve kimlik doğrulama","Endpoint tablosu","Hata kodları","Sürümleme"],"varsayilanGizlilik":"Kisitli","kodIpuclari":"- OpenAPI/Swagger tanımları (openapi.json, swagger.yaml)\n- Controller ve endpoint tanımları (route'lar, HTTP metotları)\n- İstemci SDK'ları ve örnek çağrılar\n- Hata kodları ve hata modeli (ProblemDetails, error enum'ları)","derinlik":"Kapsamli","kapsamaKurali":"Birim: her dış API endpoint'i (route tanımları/OpenAPI) ve her entegrasyon sözleşmesi (webhook, dosya biçimi). Her endpoint için: yöntem ve yol, yetki, parametreler/gövde alanları tablosu, örnek istek ve yanıt, hata kodları, sınırlar. Alan bazında gruplanmış alt sayfalar."},{"no":"17","ad":"Kullanım Kılavuzu","slug":"kullanim-kilavuzu","amac":"Son kullanıcının ürünü kullanmasını sağlar: kimler için olduğunu, başlarken adımlarını, görev akışlarını, hata mesajlarını ve sık sorulan soruları anlatır. Teknik tasarım, kurulum ya da yönetici konfigürasyonu içermez; uzun kılavuzlar modül başına alt sayfalara bölünür.","zorunluBasliklar":["Kimler için","Başlarken","Görev akışları","Hata mesajları","SSS"],"varsayilanGizlilik":"Acik","kodIpuclari":"","derinlik":"Kapsamli","kapsamaKurali":"Birim: kullanıcının açabildiği her ekran/route (router tanımı, sayfa bileşenleri) ve her ana görev akışı. Her ekran için alt sayfa: amaç ve kim kullanır, nasıl açılır, alanlar tablosu (alan, açıklama, zorunlu mu, kurallar/sınırlar), butonlar ve sonuçları, rol farkları, durumlar ve hata mesajları (koddaki gerçek metinlerle), adım adım en az bir görev akışı, ipuçları."},{"no":"18","ad":"Release Notları","slug":"release-notlari","amac":"Bir sürümde gelen yenilikleri, düzeltilen sorunları, kırıcı değişiklikleri ve bilinen sorunları müşteri ve satış için duyurur. Plan ya da roadmap maddesi, iç teknik tartışma ve gizli bilgi içermez; her madde kullanıcıya etkisi açısından yazılır.","zorunluBasliklar":["Sürüm künyesi","Yenilikler","Düzeltilen sorunlar","Kırıcı değişiklikler","Bilinen sorunlar"],"varsayilanGizlilik":"Acik","kodIpuclari":"- Git etiketleri (git tag, git describe)\n- Commit geçmişi (son etiketten bu yana)\n- PR başlıkları ve birleştirme commit'leri","derinlik":"Standart","kapsamaKurali":""}]};
 
 const AZAMI_BAYT = 64 * 1024;
 const AZAMI_KAYNAK = 50;
@@ -562,6 +562,91 @@ function surumBasliklariKontrolEt(govde) {
     : { gecti: true, seviye: 'uyari', mesaj: `Tanınmayan sürüm başlığı: ${kotu.join(', ')} (kullanılabilir: ${SURUM_BASLIKLARI.join(', ')})` };
 }
 
+// ───────────── Kapsam envanteri (.kapsam.yaml) ─────────────
+
+const KAPSAM_DURUMLARI = ['yazildi', 'eksik', 'kapsam-disi'];
+const AZAMI_KAPSAM_MESAJ = 8;
+
+/** `.kapsam.yaml` ayrıştırır → birimler dizisi; biçim hatasında YamlHatasi (`.kapsam.yaml: satır N: …`). */
+export function kapsamAyristir(metin) {
+  const kapsamHata = (n, m) => new YamlHatasi(`.kapsam.yaml: satır ${n.satir}: ${m}`);
+  let kok;
+  try {
+    kok = yamlAyristir(metin);
+  } catch (e) {
+    if (e instanceof YamlHatasi) throw new YamlHatasi(e.message.replace(/^dochub\.yaml/, '.kapsam.yaml'));
+    throw e;
+  }
+  if (kok === null || kok.t !== 'esleme') throw new YamlHatasi('.kapsam.yaml: satır 1: kök bir anahtar-değer listesi olmalı (`birimler:`).');
+  const dizi = kok.alanlar.get('birimler');
+  if (dizi === undefined) throw kapsamHata(kok, '`birimler` zorunlu.');
+  if (dizi.t !== 'liste') throw kapsamHata(dizi, '`birimler` bir liste olmalı.');
+  const birimler = [];
+  for (const oge of dizi.ogeler) {
+    if (oge.t !== 'esleme') throw kapsamHata(oge, 'Her birim anahtar-değer listesi olmalı.');
+    const al = (ad) => {
+      const d = oge.alanlar.get(ad);
+      if (d === undefined) return undefined;
+      if (d.t !== 'skaler') throw kapsamHata(d, `\`${ad}\` tek bir değer olmalı.`);
+      return d.deger.trim();
+    };
+    const ad = al('ad');
+    if (!ad) throw kapsamHata(oge, '`ad` zorunlu.');
+    const durum = al('durum') ?? '';
+    if (!KAPSAM_DURUMLARI.includes(durum)) throw kapsamHata(oge.alanlar.get('durum') ?? oge, `\`durum\` ${KAPSAM_DURUMLARI.join(' | ')} olmalı.`);
+    let kaynak = [];
+    const k = oge.alanlar.get('kaynak');
+    if (k !== undefined) {
+      if (k.t === 'liste') {
+        for (const o of k.ogeler) {
+          if (o.t !== 'skaler') throw kapsamHata(o, '`kaynak` öğeleri düz yol olmalı.');
+          if (o.deger.trim() !== '') kaynak.push(o.deger.trim());
+        }
+      } else if (k.t === 'skaler') {
+        if (k.deger.trim() !== '') kaynak = [k.deger.trim()];
+      } else throw kapsamHata(k, '`kaynak` bir yol listesi olmalı.');
+    }
+    birimler.push({ ad, kaynak, sayfa: al('sayfa') ?? '', durum, not: al('not') ?? '', satir: oge.satir });
+  }
+  return birimler;
+}
+
+/** Kapsamlı tip klasörünün envanter denetimi. Sorunlar UYARIdır (geçer, `seviye: uyari`), hata değil. */
+function kapsamKontrolEt(kok, klasorDizini) {
+  const dosya = path.join(klasorDizini, '.kapsam.yaml');
+  const uyari = (mesaj, ayrinti) => ({ kod: 'kapsam', gecti: true, seviye: 'uyari', mesaj, ...(ayrinti ? { ayrinti } : {}) });
+  if (!dosyaMi(dosya)) return uyari('Kapsamlı tipte kapsam envanteri (.kapsam.yaml) yok; dochub-uret envanteri üretir');
+  let birimler;
+  try {
+    birimler = kapsamAyristir(oku(dosya));
+  } catch (e) {
+    if (!(e instanceof YamlHatasi)) throw e;
+    return uyari(e.message);
+  }
+  if (birimler.length === 0) return uyari('.kapsam.yaml: `birimler` boş');
+  const sorunlar = [];
+  for (const b of birimler) {
+    const onek = `satır ${b.satir}: "${b.ad}"`;
+    if (b.durum === 'eksik') sorunlar.push(`${onek}: durum eksik (yazılmamış)`);
+    if (b.durum === 'kapsam-disi' && b.not === '') sorunlar.push(`${onek}: kapsam-disi için \`not\` (gerekçe) zorunlu`);
+    if (b.durum === 'yazildi') {
+      const sayfaTam = b.sayfa === '' ? null : path.resolve(klasorDizini, b.sayfa.replaceAll('\\', '/'));
+      if (sayfaTam === null) sorunlar.push(`${onek}: \`sayfa\` boş`);
+      else if (!depodaMi(kok, sayfaTam) || !dosyaMi(sayfaTam)) sorunlar.push(`${onek}: sayfa yok (${b.sayfa})`);
+    }
+    for (const k of b.kaynak) {
+      if (/[*?[\]{}]/.test(k)) continue;   // glob: yalnız düz yollar denetlenir
+      const temiz = yolTemizle(k);
+      const tam = temiz === null ? null : path.join(kok, ...temiz.split('/'));
+      if (tam === null || !depodaMi(kok, tam) || !existsSync(tam)) sorunlar.push(`${onek}: kaynak yok (eskimiş olabilir): ${k}`);
+    }
+  }
+  if (sorunlar.length === 0) return { kod: 'kapsam', gecti: true, mesaj: `Kapsam envanteri tutarlı (${birimler.length} birim)` };
+  const gosterilen = sorunlar.slice(0, AZAMI_KAPSAM_MESAJ);
+  const fazla = sorunlar.length - gosterilen.length;
+  return uyari(`Kapsam envanteri: ${sorunlar.length} sorun — ${gosterilen.join('; ')}${fazla > 0 ? `; (+${fazla} daha)` : ''}`, sorunlar);
+}
+
 // ───────────── Ana doğrulama ─────────────
 
 export function dogrula(kok, katalog) {
@@ -587,14 +672,15 @@ export function dogrula(kok, katalog) {
     return sonuclar;
   }
 
-  const uzayDegiskenleri = degiskenOku(path.join(kok, '.gitbook', 'vars.yaml'));
-  const kokIncludeDizini = path.join(kok, '.gitbook', 'includes');
+  // Ortak .gitbook kökleri: repo kökü ve dochub/. Öncelik (değişkenlerde): klasör düzeyi → dochub/.gitbook → kök .gitbook.
+  const uzayDegiskenleri = { ...degiskenOku(path.join(kok, '.gitbook', 'vars.yaml')), ...degiskenOku(path.join(kok, 'dochub', '.gitbook', 'vars.yaml')) };
+  const ortakIncludeDizinleri = [path.join(kok, 'dochub', '.gitbook', 'includes'), path.join(kok, '.gitbook', 'includes')];
 
   for (const b of sozlesme.dokumanlar) {
     const tip = tipler.get(b.tip);
     const klasorDizini = path.join(kok, ...b.klasor.split('/'));
     const uzay = { ...uzayDegiskenleri, ...degiskenOku(path.join(klasorDizini, '.gitbook', 'vars.yaml')) };
-    const adaylar = [...new Set([...tumDosyalar(path.join(klasorDizini, '.gitbook', 'includes')), ...tumDosyalar(kokIncludeDizini)])];
+    const adaylar = [...new Set([...tumDosyalar(path.join(klasorDizini, '.gitbook', 'includes')), ...ortakIncludeDizinleri.flatMap(tumDosyalar)])];
     /** Sayfanın DocHub'ın gördüğü içeriği: include'lar yerinde, değişkenler çözülmüş (hassas/başlık kuralları bunu tarar). */
     const sayfaOku = (tam) => {
       const { onMadde, govde } = onMaddeAyir(oku(tam));
@@ -602,6 +688,10 @@ export function dogrula(kok, katalog) {
       const icerik = degiskenCoz(includeGenislet(govde, tam, adaylar, sorunlar), uzay, onMadde?.vars && typeof onMadde.vars === 'object' ? onMadde.vars : {});
       return { onMadde, govde, icerik, sorunlar };
     };
+    const klasorKucuk = b.klasor.toLowerCase();
+    if (klasorKucuk !== 'dochub' && !klasorKucuk.startsWith('dochub/')) {
+      ekle(b.klasor, { kod: 'klasor-yeri', gecti: true, seviye: 'uyari', mesaj: `\`${b.klasor}\` klasörü \`dochub/\` altında değil; önerilen: \`dochub/${b.tip === '18' ? 'changelog' : tip.slug}\`` });
+    }
     const readmeYol = `${b.klasor}/README.md`;
     const readmeTam = path.join(klasorDizini, 'README.md');
 
@@ -638,6 +728,7 @@ export function dogrula(kok, katalog) {
 
     // Hassas bilgi taraması + changelog ön maddesi: klasördeki tüm sayfalar (SUMMARY.md hariç).
     if (!existsSync(klasorDizini) || !statSync(klasorDizini).isDirectory()) continue;
+    if (tip.derinlik === 'Kapsamli') ekle(`${b.klasor}/.kapsam.yaml`, kapsamKontrolEt(kok, klasorDizini));
     for (const g of markdownDosyalari(klasorDizini)) {
       if (g.toLowerCase() === 'summary.md') continue;
       const yol = `${b.klasor}/${g}`;

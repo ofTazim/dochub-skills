@@ -1,7 +1,7 @@
 ---
 name: dochub-iskelet
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 description: "Onaylanan DocHub doküman tipleri için repo'da klasör, README.md (zorunlu başlıklarla), SUMMARY.md ve changelog klasörünü kurar; var olan dosyaların üzerine yazmaz. Kullan: dokümantasyon iskeleti, 'klasörleri oluştur', 'dochub.yaml yaz', README/SUMMARY kurulumu. Use to scaffold DocHub documentation in a repo: create dochub.yaml, folders, README.md with required headings, SUMMARY.md (GitBook table of contents), changelog folder; idempotent."
 ---
 
@@ -28,13 +28,16 @@ Yazmadan önce, oluşturulacak ve **dokunulmayacak** dosyaları listeleyin:
 ```text
 Oluşturulacak:
   dochub.yaml
-  docs/kurulum/README.md       (tip 07 şablonu, zorunlu başlıklarla)
-  docs/kurulum/SUMMARY.md
-  changelog/README.md
-  changelog/SUMMARY.md
+  dochub/kurulum-dokumani/README.md       (tip 07 şablonu, zorunlu başlıklarla)
+  dochub/kurulum-dokumani/SUMMARY.md
+  dochub/kurulum-dokumani/.kapsam.yaml    (07 Kapsamlı ise: boş envanter iskeleti)
+  dochub/changelog/README.md
+  dochub/changelog/SUMMARY.md
 Zaten var, dokunulmayacak:
-  docs/mimari/README.md
+  dochub/sistem-dizayn-dokumani/README.md
 ```
+
+Varsayılan klasörler `dochub/<tip-slug>` ve `dochub/changelog`'dır; `dochub.yaml` repo kökünde kalır. Repo'daki mevcut `docs/` ve kök `changelog/` klasörlerini yeniden kullanmayın; kullanıcı özellikle başka klasör isterse `dochub/` dışı seçimin `dochub-dogrula`'da `klasor-yeri` uyarısı vereceğini söyleyin.
 
 Kullanıcı açıkça onaylamadan hiçbir şey yazmayın. Var olan bir dosya, kullanıcı o dosya için ayrıca söylemedikçe **hiçbir koşulda ezilmez** (idempotent çalışma).
 
@@ -54,6 +57,17 @@ Kullanıcı açıkça onaylamadan hiçbir şey yazmayın. Var olan bir dosya, ku
    * Dosyada `# ` (H1) başlığı olmaz; sayfa başlığı DocHub'dan gelir.
    * Her bölümün altı doldurulmamışsa kısa bir "Doğrulanmalı" uyarısı taşır; bunu `dochub-uret` dolduracaktır.
    * Künye alanı (persona, gizlilik, sahip) yazılmaz.
+
+#### Kapsamlı tipler için `.kapsam.yaml`
+
+Tipin dosyasındaki "Derinlik ve kapsama" bölümü **Kapsamlı** ise klasörün içine `.kapsam.yaml` iskeletini yazın (yoksa; varsa dokunmayın). Birimleri `dochub-uret` koddan çıkarıp doldurur; iskelet yalnız başlığı taşır:
+
+```yaml
+# dochub-uret üretir, dochub-guncelle günceller
+birimler: []
+```
+
+Biçim ve alanlar için `../../shared/dochub-yaml.md` "Kapsam envanteri" bölümüne bakın.
 
 ### 4. `SUMMARY.md`
 
@@ -85,8 +99,8 @@ GitBook gramerine uyun:
 
 ### 6. Görseller ve ortak içerik (gerekirse)
 
-* Görseller `<klasör>/.gitbook/assets/` (klasör düzeyi) ya da depo kökündeki `.gitbook/assets/` altına konur ve **sayfaya göre** göreli yolla bağlanır (kök için doğru `../` derinliği: `docs/kurulum/README.md` içinden `../../.gitbook/assets/logo.png`).
-* Tekrar eden metin için klasör düzeyinde `<klasör>/.gitbook/includes/<ad>.md` ve klasör README'sinden `{% include ".gitbook/includes/<ad>.md" %}`; depo kökündeki include için `{% include "../../.gitbook/includes/<ad>.md" %}` (derinliğe göre). Değişkenler `.gitbook/vars.yaml` içinde. Bunları yalnız gerçekten ihtiyaç varsa oluşturun.
+* Birden çok tipin kullandığı görsel ve include'lar **`dochub/.gitbook/`** altına konur (`dochub/.gitbook/assets/`, `dochub/.gitbook/includes/`, `dochub/.gitbook/vars.yaml`) ve **sayfaya göre** göreli yolla bağlanır: `dochub/kurulum-dokumani/README.md` içinden `../.gitbook/assets/logo.png`. Yalnız tek klasöre ait olanlar `<klasör>/.gitbook/assets/` altında kalır. Depo kökündeki `.gitbook/` hâlâ desteklenir ama yeni içerik için `dochub/.gitbook/` tercih edilir. Çözüm önceliği: klasör düzeyi → `dochub/.gitbook` → kök `.gitbook`.
+* Tekrar eden metin için `dochub/.gitbook/includes/<ad>.md` ve sayfadan `{% include "../.gitbook/includes/<ad>.md" %}` (sayfanın derinliğine göre `../`); yalnız tek klasörde kullanılıyorsa `<klasör>/.gitbook/includes/<ad>.md` ve `{% include ".gitbook/includes/<ad>.md" %}`. Değişkenler ilgili `.gitbook/vars.yaml` içinde. Bunları yalnız gerçekten ihtiyaç varsa oluşturun.
 * Repo'da indirilebilir dosya eki (`{% file %}`, PDF/ZIP) desteklenmez; SharePoint/URL bağlantısı verin.
 * Klasörler arası sayfa bağlantısı (`[Kurulum](../kurulum/README.md)`) desteklenir.
 

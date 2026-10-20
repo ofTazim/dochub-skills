@@ -10,12 +10,14 @@ surum: 1
 urun: AirApi
 dokumanlar:
   - tip: "07"
-    klasor: docs/kurulum
+    klasor: dochub/kurulum-dokumani
     otomatik: true
     kaynaklar: [Dockerfile, "docker-compose*.yml", "deploy/k8s/**"]
   - tip: "18"
-    klasor: changelog
+    klasor: dochub/changelog
 ```
+
+`dochub.yaml` repo kökünde durur; doküman içeriği `dochub/<tip-slug>/` ve `dochub/changelog/` altına yazılır. `dochub/` dışındaki bir klasör beyanı çalışır ama `dochub-dogrula` `klasor-yeri` uyarısı verir.
 
 ## Alanlar
 
@@ -25,7 +27,7 @@ dokumanlar:
 | `urun` | evet | DocHub'daki ürün adı; boş olamaz. |
 | `dokumanlar` | evet | En az bir kayıt içeren liste. |
 | `dokumanlar[].tip` | evet | İki haneli tip numarası, tırnak içinde (`"07"`). Bilinmeyen ve dosya tabanlı tipler reddedilir; bir tip yalnız bir kez beyan edilir. |
-| `dokumanlar[].klasor` | evet | Repo içinde göreli yol (`docs/kurulum`). `..`, mutlak yol ve sürücü harfi yok; aynı klasör iki kez beyan edilemez (büyük/küçük harf duyarsız). |
+| `dokumanlar[].klasor` | evet | Repo içinde göreli yol; varsayılan `dochub/<tip-slug>` (`dochub/kurulum-dokumani`). `..`, mutlak yol ve sürücü harfi yok; aynı klasör iki kez beyan edilemez (büyük/küçük harf duyarsız). |
 | `dokumanlar[].otomatik` | hayır | `true` ya da `false`. DocHub'da bilgi amaçlıdır; skill'ler "bu tip kod değişince güncellenmeli mi" için kullanır. |
 | `dokumanlar[].kaynaklar` | hayır | Glob listesi (en çok 50). Bu doküman hangi kod dosyalarından üretilir; `dochub-guncelle` değişen dosyaları bununla eşler. |
 
@@ -35,11 +37,32 @@ Dosya en çok 64 KB olabilir.
 
 - `README.md` → tipin kök dokümanı. Zorunlu başlıklar burada aranır; **istisna: tip 18 (Release Notları) kökü** serbest giriş metnidir, zorunlu başlık aranmaz.
 - `SUMMARY.md` → alt sayfa ağacı ve sırası. Yoksa klasör yapısı kullanılır. README ilk satırdadır, kardeş sayfalar düz listelenir.
-- Görseller klasör düzeyindeki `<klasör>/.gitbook/assets/` ya da depo kökündeki `.gitbook/assets/` altında; tekrar kullanılan içerik klasör düzeyinde `.gitbook/includes/` (klasör README'sinden `{% include ".gitbook/includes/x.md" %}`) ya da kökte (`{% include "../../.gitbook/includes/x.md" %}`, doğru `../` derinliğiyle); değişkenler `.gitbook/vars.yaml` içindedir. Yollar sayfaya görelidir; çözülemeyen include için DocHub klasör düzeyi + kök `.gitbook/includes/` içinde tekil dosya adı eşleşmesi arar.
+- `.gitbook` konumları (yollar sayfaya görelidir): **klasör düzeyi** `<klasör>/.gitbook/` (yalnız o klasöre ait görsel/include), **`dochub/.gitbook/`** (tipler arası ortak görsel/include/değişkenler; yeni içerik için tercih edilen yer) ve **depo kökü** `.gitbook/` (eski düzen, hâlâ çalışır). Öncelik: klasör düzeyi → `dochub/.gitbook` → kök `.gitbook`. Görseller `…/.gitbook/assets/`, include'lar `…/.gitbook/includes/`, değişkenler `…/.gitbook/vars.yaml` içindedir.
+  - Örnek: `dochub/kurulum-dokumani/README.md` içinden ortak görsel `![Şema](../.gitbook/assets/sema.png)`, ortak include `{% include "../.gitbook/includes/uyari.md" %}`; klasör düzeyi include `{% include ".gitbook/includes/uyari.md" %}`; kök include `{% include "../../.gitbook/includes/uyari.md" %}`.
+  - Çözülemeyen include için DocHub klasör düzeyi, `dochub/.gitbook` ve kök `.gitbook/includes/` içinde tekil dosya adı eşleşmesi arar.
+- `<klasör>/.kapsam.yaml` → Kapsamlı tiplerin kapsama envanteri (aşağıda). DocHub tarafından okunmaz; skill'ler ve `dochub-dogrula` kullanır.
 - Başka bir beyan edilmiş klasördeki sayfaya `[metin](../kurulum/README.md)` ile bağlanılabilir (düz bağlantı, kart ve buton `href` değerleri DocHub bağlantısına çevrilir).
 - Repo içeriğinde `{% file %}` ile dosya eki (PDF/ZIP) desteklenmez; SharePoint/URL bağlantısı verin.
 - Hint ve diğer çift etiketli bloklar çok satırlı yazılır (açılış, metin, kapanış ayrı satırlarda).
 - Künye bilgileri (persona, gizlilik, sahip, reviewer, onaylayan) repo'da tutulmaz.
+
+## Kapsam envanteri (`.kapsam.yaml`)
+
+Tipin "Derinlik ve kapsama" bölümü **Kapsamlı** ise `dochub-uret` klasörün içine `.kapsam.yaml` yazar, `dochub-guncelle` günceller:
+
+```yaml
+# dochub-uret üretir, dochub-guncelle günceller
+birimler:
+  - ad: Ayarlar ekranı
+    kaynak: [web/src/pages/Ayarlar.tsx]
+    sayfa: ayarlar.md
+    durum: yazildi        # yazildi | eksik | kapsam-disi
+    not: ""               # kapsam-disi için gerekçe zorunlu
+```
+
+- `ad`: birimin adı (ekran, endpoint, parametre, bileşen, varlık…). `kaynak`: birimi tanımlayan repo-göreli kod yolları. `sayfa`: klasöre göre göreli sayfa dosyası.
+- `durum`: `yazildi` (sayfa yazıldı), `eksik` (henüz yazılmadı), `kapsam-disi` (bilerek yazılmıyor; `not` zorunlu).
+- `dochub-dogrula` `kapsam` kuralı şunları **uyarı** olarak bildirir: dosya yok, `sayfa` yok, `durum: eksik`, `kaynak` yolu repo'da yok (eskimiş), `kapsam-disi` ama `not` boş, geçersiz YAML/biçim (satır numaralı). Glob içeren `kaynak` öğeleri denetlenmez.
 
 ## Changelog sürüm sayfası (tip 18)
 
@@ -64,7 +87,7 @@ etiketler: [yeni, api]
 
 `surum` zorunlu, `tarih` `YYYY-AA-GG` ve geçerli bir takvim günü olmalıdır, `etiketler` isteğe bağlı listedir. Sayfa başlığı ilk `# ` satırından alınır.
 
-Sürüm sayfası bölümleri tam olarak `## Yenilikler`, `## Düzeltilen sorunlar`, `## Kırıcı değişiklikler` başlıklarıdır (her biri isteğe bağlı; boş bölüm yazılmaz). Changelog zaman çizelgesinde yalnız ön maddesinde `surum` olan sayfalar görünür; `SUMMARY.md` grupları sürüm sayılmaz. Changelog klasörünün `README.md` dosyası serbest bir giriş metnidir.
+Sürüm sayfası bölümleri tam olarak `## Sürüm künyesi`, `## Yenilikler`, `## Düzeltilen sorunlar`, `## Kırıcı değişiklikler`, `## Bilinen sorunlar` başlıklarından oluşur (her biri isteğe bağlı; boş bölüm yazılmaz). Changelog zaman çizelgesinde yalnız ön maddesinde `surum` olan sayfalar görünür; `SUMMARY.md` grupları sürüm sayılmaz. Changelog klasörünün `README.md` dosyası serbest bir giriş metnidir.
 
 ## Desteklenen tipler
 

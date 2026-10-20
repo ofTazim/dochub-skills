@@ -226,15 +226,18 @@ API sözleşmesi: [openapi.yaml](../api/openapi.yaml)
 Include dosyaları bir `.gitbook/includes/` klasöründe durur ve yalnız oradaki dosyalar include edilebilir. Yol **çağıran sayfaya göredir**:
 
 ```markdown
-<!-- Klasör düzeyi include: docs/kurulum/.gitbook/includes/uyari.md, docs/kurulum/README.md içinden -->
+<!-- Klasör düzeyi include: dochub/kurulum/.gitbook/includes/uyari.md, dochub/kurulum/README.md içinden -->
 {% include ".gitbook/includes/uyari.md" %}
 
-<!-- Depo kökündeki include: .gitbook/includes/ortak.md, docs/kurulum/README.md içinden (doğru ../ derinliği) -->
+<!-- Ortak include: dochub/.gitbook/includes/ortak.md, dochub/kurulum/README.md içinden -->
+{% include "../.gitbook/includes/ortak.md" %}
+
+<!-- Depo kökündeki include: .gitbook/includes/ortak.md, dochub/kurulum/README.md içinden (doğru ../ derinliği) -->
 {% include "../../.gitbook/includes/ortak.md" %}
 ```
 
-* Klasör düzeyi (`<klasör>/.gitbook/includes/`) ve kök (`.gitbook/includes/`) include'ları birlikte desteklenir.
-* Yol çözülemezse (klasörün dışına çıkıyor ya da dosya yok) DocHub, **tekil** dosya adı eşleşmesi arar: klasör düzeyi ve kök `.gitbook/includes/` içinde aynı adlı tek bir dosya varsa o kullanılır. Aynı ad birden çok yerdeyse include **belirsiz** sayılır ve atlanır; bu yüzden tam yolu yazın ve dosya adlarını benzersiz tutun.
+* Klasör düzeyi (`<klasör>/.gitbook/includes/`), ortak (`dochub/.gitbook/includes/`) ve kök (`.gitbook/includes/`) include'ları birlikte desteklenir; yeni ortak içerik için `dochub/.gitbook/` tercih edilir.
+* Yol çözülemezse (klasörün dışına çıkıyor ya da dosya yok) DocHub, **tekil** dosya adı eşleşmesi arar: klasör düzeyi, `dochub/.gitbook/includes/` ve kök `.gitbook/includes/` içinde aynı adlı tek bir dosya varsa o kullanılır. Aynı ad birden çok yerdeyse include **belirsiz** sayılır ve atlanır; bu yüzden tam yolu yazın ve dosya adlarını benzersiz tutun.
 * `{% include %}` yalnız kendi satırında durmalıdır. `dochub-dogrula` çözülemeyen include'ları `include-hedef` kuralıyla bildirir.
 
 ## Değişkenler
@@ -249,7 +252,7 @@ Yalnız bir sayfaya özel değişken, sayfa ön maddesindeki `vars:` altında ta
 
 ## Standart markdown
 
-Listeler, tablolar, bağlantılar, görseller (`![alt metin](.gitbook/assets/sema.png)`), kalın/italik, satır içi kod ve dil etiketli kod blokları serbesttir. Görseller klasör düzeyindeki `<klasör>/.gitbook/assets/` ya da depo kökündeki `.gitbook/assets/` altında durabilir; yol sayfaya göredir (kök için `../../.gitbook/assets/logo.png` gibi doğru `../` derinliği). Bağlantılar:
+Listeler, tablolar, bağlantılar, görseller (`![alt metin](.gitbook/assets/sema.png)`), kalın/italik, satır içi kod ve dil etiketli kod blokları serbesttir. Görseller klasör düzeyindeki `<klasör>/.gitbook/assets/`, ortak `dochub/.gitbook/assets/` ya da depo kökündeki `.gitbook/assets/` altında durabilir; yol sayfaya göredir (`dochub/kurulum/README.md` içinden ortak görsel için `../.gitbook/assets/logo.png`, kök için `../../.gitbook/assets/logo.png` gibi doğru `../` derinliği). Bağlantılar:
 
 * Aynı klasör: `[Kurulum](kurulum.md)`; üst klasör: `[Mimari](../mimari/README.md)`.
 * **Başka bir beyan edilmiş klasördeki** sayfa: `[Kurulum](../kurulum/README.md)`. Aynı repo içindeki `.md` bağlantıları (düz bağlantı, kart ve buton `href` değerleri dahil) DocHub doküman bağlantılarına çevrilir; hedef dosya var olmalıdır (`baglanti-hedef`).

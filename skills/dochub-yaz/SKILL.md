@@ -1,7 +1,7 @@
 ---
 name: dochub-yaz
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 description: "DocHub dokümantasyonu yazım kuralları ve desteklenen GitBook blokları başvurusu: hint, tabs, stepper, details, columns, updates, cards, embed, buton, ikon, kod başlığı, include, değişken; başlık ve hassas bilgi kuralları. Kullan: README.md/SUMMARY.md yazarken, blok sözdizimi sorarken, 'nasıl yazmalıyım'. Use when writing or editing documentation pages that DocHub syncs from Git: GitBook markdown blocks, SUMMARY.md grammar, page front matter, writing rules."
 ---
 
@@ -22,20 +22,38 @@ Repo'daki bir doküman sayfasını (`README.md`, alt sayfa, `SUMMARY.md`, change
 
 ```text
 dochub.yaml                 # hangi klasör hangi tip
-docs/kurulum/
-  README.md                 # tipin kök dokümanı (zorunlu başlıklar burada)
-  SUMMARY.md                # alt sayfa ağacı ve sırası
-  ek-sayfa.md
-  .gitbook/assets/          # görseller (klasör düzeyi; depo kökündeki .gitbook/assets/ da olur)
-  .gitbook/includes/        # tekrar kullanılan içerik (klasör düzeyi; kökteki .gitbook/includes/ da olur)
-.gitbook/vars.yaml          # değişkenler (depo kökü; klasör içinde de olabilir)
-changelog/
-  README.md                 # serbest giriş metni; zorunlu başlık yok
-  SUMMARY.md
-  1.4.0.md                  # ön madde: surum, tarih, etiketler
+dochub/
+  kurulum-dokumani/
+    README.md               # tipin kök dokümanı (zorunlu başlıklar burada)
+    SUMMARY.md              # alt sayfa ağacı ve sırası
+    ek-sayfa.md
+    .kapsam.yaml            # yalnız Kapsamlı tiplerde: kapsama envanteri
+    .gitbook/assets/        # yalnız bu klasöre ait görseller (klasör düzeyi)
+    .gitbook/includes/      # yalnız bu klasöre ait include'lar
+  changelog/
+    README.md               # serbest giriş metni; zorunlu başlık yok
+    SUMMARY.md
+    1.4.0.md                # ön madde: surum, tarih, etiketler
+  .gitbook/assets/          # tipler arası ortak görseller
+  .gitbook/includes/        # tipler arası ortak include'lar
+  .gitbook/vars.yaml        # ortak değişkenler
+.gitbook/                   # (eski düzen) depo kökü; hâlâ desteklenir
 ```
 
-Görseller ve include dosyaları hem klasör düzeyinde (`<klasör>/.gitbook/…`) hem depo kökünde (`.gitbook/…`) durabilir. Yollar her zaman **sayfaya göredir**; kök için doğru `../` derinliğini yazın (`docs/kurulum/README.md` içinden `../../.gitbook/assets/logo.png`). Başka bir beyan edilmiş klasördeki sayfaya `[metin](../mimari/README.md)` ile bağlanabilirsiniz. Repoda indirilebilir dosya eki (PDF/ZIP) desteklenmez; SharePoint/URL bağlantısı verin.
+`.gitbook` üç yerde olabilir: **klasör düzeyi** (`<klasör>/.gitbook/…`), **`dochub/.gitbook/`** (ortak; yeni içerik için tercih edin) ve **depo kökü** (`.gitbook/…`). Öncelik klasör düzeyi → `dochub/.gitbook` → kök sırasıdır. Yollar her zaman **sayfaya göredir**; `dochub/kurulum-dokumani/README.md` içinden ortak görsel `../.gitbook/assets/logo.png`, depo kökündeki görsel `../../../.gitbook/assets/logo.png` olur.
+
+`.kapsam.yaml` (Kapsamlı tipler; `dochub-uret` üretir, `dochub-guncelle` günceller) biçimi:
+
+```yaml
+# dochub-uret üretir, dochub-guncelle günceller
+birimler:
+  - ad: Ayarlar ekranı
+    kaynak: [web/src/pages/Ayarlar.tsx]
+    sayfa: ayarlar.md
+    durum: yazildi        # yazildi | eksik | kapsam-disi
+    not: ""               # kapsam-disi için gerekçe zorunlu
+```
+ Başka bir beyan edilmiş klasördeki sayfaya `[metin](../mimari/README.md)` ile bağlanabilirsiniz. Repoda indirilebilir dosya eki (PDF/ZIP) desteklenmez; SharePoint/URL bağlantısı verin.
 
 ### Başlık kuralları
 
@@ -113,7 +131,7 @@ Tam sözdizimi ve örnekler: `references/bloklar.md`. **Orada olmayan blok ya da
 | `{% openapi %}` bloğu / SUMMARY'de `builtin:openapi` | Bağlantı kartına döner | Spesifikasyon adresine/dosyasına bağlanın; önemli uçları kısa tabloyla özetleyin |
 | `<iframe>` ile gömme | Çizilmez | `{% embed url="…" %}` (bağlantı olarak görünür) ya da düz bağlantı |
 | Özel HTML/script/stil | Temizlenir | Standart markdown ve listelenen bloklar |
-| `{% include %}` ile `.gitbook/includes/` dışı yollar | Çözülmez (yalnız tek ad eşleşmesi aranır) | Yalnız klasör düzeyi veya kök `.gitbook/includes/` altı; tam yol yazın |
+| `{% include %}` ile `.gitbook/includes/` dışı yollar | Çözülmez (yalnız tek ad eşleşmesi aranır) | Yalnız klasör düzeyi, `dochub/.gitbook/includes/` veya kök `.gitbook/includes/` altı; tam yol yazın |
 | `{% file %}` ile repo içi PDF/ZIP eki | Aktarılmaz | SharePoint/URL bağlantısı verin |
 | Tek satırda `{% hint %}…{% endhint %}` | Çizilir ama önerilmez | Açılış, metin, kapanış ayrı satırlarda |
 
@@ -123,7 +141,7 @@ Tam sözdizimi ve örnekler: `references/bloklar.md`. **Orada olmayan blok ya da
 * Kısa paragraflar; aktif cümleler; bir bölüm tek konu.
 * Komut ve yol gibi değişmez metinleri `` `kod` `` içinde yazın; çalıştırılacak komutları başlıklı kod bloğuna koyun.
 * Bağlantı metni anlamlı olsun ("buraya tıklayın" değil, "Kurulum adımları").
-* Görsellere alt metin ekleyin; görselleri `.gitbook/assets/` altında (klasör düzeyi ya da kök) tutun.
+* Görsellere alt metin ekleyin; görselleri `.gitbook/assets/` altında (klasör düzeyi, `dochub/.gitbook/` ya da kök) tutun.
 * Tarihler `YYYY-AA-GG`; sürümler `1.4.0` biçiminde; tutarlı terim kullanın.
 * Kodda görmediğinizi yazmayın; tahmini bilgi yerine "Doğrulanmalı" hint'i kullanın.
 

@@ -1,7 +1,7 @@
 ---
 name: dochub-dogrula
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 description: "DocHub doküman repo'sunu bağımlılıksız Node betiğiyle doğrular: dochub.yaml sözleşmesi, README ve zorunlu başlıklar, SUMMARY.md bağlantıları, başlık karakterleri, changelog ön maddesi ve Kısıtlı/Açık tiplerde hassas bilgi (IP, password/şifre/token). yaml, başlıklar, hassas bilgi ve başlık karakteri kurallarında DocHub ile aynı sonucu verir; CI'da kullanılır. Kullan: dokümantasyonu doğrula, 'dochub kontrolleri', CI şablonu. Use to validate DocHub documentation in a repo (dochub.yaml, required headings, SUMMARY links, changelog front matter, sensitive data) with a Node script."
 ---
 
@@ -35,9 +35,10 @@ node skills/dochub-dogrula/scripts/dochub-dogrula.mjs [kök] [--json]
 
 ```text
 [OK]    yaml               dochub.yaml
-[OK]    readme             docs/kurulum/README.md
-[HATA]  basliklar          docs/mimari/README.md  Eksik başlık: Veri modeli
-[HATA]  hassas             docs/mimari/api.md  Hassas bilgi şüphesi: IP adresi
+[OK]    readme             dochub/kurulum-dokumani/README.md
+[HATA]  basliklar          dochub/sistem-dizayn-dokumani/README.md  Eksik başlık: Veri modeli
+[HATA]  hassas             dochub/sistem-dizayn-dokumani/api.md  Hassas bilgi şüphesi: IP adresi
+[UYARI] kapsam             dochub/kurulum-dokumani/.kapsam.yaml  Kapsam envanteri: 2 sorun — …
 
 2 kural kaldı, 18 geçti.
 ```
@@ -54,14 +55,16 @@ node skills/dochub-dogrula/scripts/dochub-dogrula.mjs [kök] [--json]
 | `hassas` | Varsayılan gizliliği **Kısıtlı** ya da **Açık** olan tiplerde IP adresi ve gerçek gizli değerler: `password`, `şifre`, `token`, `secret`, `api key` vb. adlı bir anahtara atanmış ≥6 karakterlik değer (`SMTP_SIFRE=...`), bilinen token biçimleri (GitHub, AWS, JWT, Slack) ve PEM özel anahtar başlığı. Sözcüğün kendisi, tablo hücresi ya da `${DEGISKEN}`, `***`, `<...>` gibi yer tutucular bulgu değildir | Değeri kaldırın; ortam değişkeni adını yazın (`SMTP_SIFRE=${SMTP_SIFRE}`), IP yerine ana makine adı değişkeni kullanın. Diğer gizlilik düzeylerinde tarama atlanır. |
 | `changelog-onmadde` | Tip 18 sürüm sayfalarında ön madde: `surum` dolu, `tarih` `YYYY-AA-GG` ve geçerli gün, `etiketler` liste | Ön maddeyi dosyanın başına koyun, tarihi düzeltin. |
 | `changelog-baslik` | Tip 18 sürüm sayfalarındaki `## ` başlıkları `Sürüm künyesi`, `Yenilikler`, `Düzeltilen sorunlar`, `Kırıcı değişiklikler`, `Bilinen sorunlar` kümesinden olmalı (hepsi isteğe bağlı). Başka başlık **uyarı** üretir (`[UYARI]`, JSON'da `"seviye": "uyari"`; çıkış kodunu etkilemez) | Başlığı önerilen adla yeniden yazın ya da yok sayın. |
-| `include-hedef` | Sayfadaki her `{% include "…" %}` çözülüyor mu: sayfaya göre yol (klasör düzeyi `.gitbook/includes/` ya da kök) ya da klasör düzeyi + kök `.gitbook/includes/` içinde **tek** dosya adı eşleşmesi; birden çok eşleşme "belirsiz" | Yolu düzeltin (kök için doğru `../` derinliği) ya da dosyayı `.gitbook/includes/` altına koyun/adını benzersiz yapın. |
-| `gorsel-hedef` | `![](…)` ve `<img src>` ile verilen yerel görseller depoda var mı (dış URL ve `data:` atlanır) | Görseli ekleyin (`.gitbook/assets/` klasör düzeyi ya da kök) ya da yolu düzeltin. |
+| `include-hedef` | Sayfadaki her `{% include "…" %}` çözülüyor mu: sayfaya göre yol (klasör düzeyi, `dochub/.gitbook/includes/` ya da kök `.gitbook/includes/`) ya da bu üç yerde **tek** dosya adı eşleşmesi; birden çok eşleşme "belirsiz" | Yolu düzeltin (kök için doğru `../` derinliği) ya da dosyayı `.gitbook/includes/` altına koyun/adını benzersiz yapın. |
+| `gorsel-hedef` | `![](…)` ve `<img src>` ile verilen yerel görseller depoda var mı (dış URL ve `data:` atlanır) | Görseli ekleyin (`.gitbook/assets/` klasör düzeyi, `dochub/.gitbook/` ya da kök) ya da yolu düzeltin. |
 | `baglanti-hedef` | Yerel `.md` bağlantıları (`[..](x.md)` ve `<a href="x.md">`, başka beyan edilmiş klasördekiler dahil) depoda var mı | Yolu düzeltin ya da bağlantıyı kaldırın. |
+| `kapsam` | **Yalnız Kapsamlı tiplerde** klasördeki `.kapsam.yaml` envanteri. Hepsi **uyarı** (`[UYARI]`, JSON'da `"seviye": "uyari"`; çıkış kodunu etkilemez): dosya yok; birimin `sayfa`'sı klasörde yok; `durum: eksik`; `kaynak` yolu repo'da yok (eskimiş; glob içeren öğeler denetlenmez); `durum: kapsam-disi` ama `not` boş; geçersiz YAML/biçim (mesajda satır numarası). | Dosya yoksa `dochub-uret` ile envanter çıkarın; eksik birimin sayfasını yazın ya da gerekçeyle `kapsam-disi` yapın; eskiyen `kaynak` yolunu `dochub-guncelle` ile düzeltin. Biçim: `../../shared/dochub-yaml.md`. |
+| `klasor-yeri` | Beyan edilen `klasor` `dochub/` altında değilse **uyarı** (varsayılan `dochub/<tip-slug>`, changelog için `dochub/changelog`). Yalnız sorun varsa sonuç üretilir. | Klasörü `dochub/` altına taşıyıp `dochub.yaml`'ı güncelleyin (taşımayı kullanıcıyla onaylayın) ya da uyarıyı bilerek bırakın. |
 | `gitbook-blok` | `{% hint %}`, `{% tabs %}`, `{% stepper %}`, `{% code %}`… açılış/kapanışları eşleşiyor mu (tek satırlı hint de dengeli sayılır); yerel dosyaya işaret eden `{% file %}` desteklenmez | Eksik kapanışı ekleyin; dosya ekini SharePoint/URL bağlantısıyla değiştirin. |
 
 Notlar:
 
-* `yaml`, `basliklar`, `hassas` ve `baslik-karakter` kurallarında betik DocHub ile **aynı sonucu** verir; `hassas` ve `basliklar` için betik, DocHub gibi önce `{% include %}` ve `.gitbook/vars.yaml` / sayfa `vars` değişkenlerini çözer. `summary`, `changelog-onmadde`, `changelog-baslik`, `include-hedef`, `gorsel-hedef`, `baglanti-hedef`, `gitbook-blok` ve `readme` betiğe özgü yerel ek kontrollerdir (DocHub'ın senkron adımına karşılık gelir, birebir aynı değildir). Ayrıca künye (persona, sahip) ve alt sayfa kuralları DocHub tarafındadır. Betik yeşil olsa da DocHub'da künye uyarıları görülebilir.
+* `yaml`, `basliklar`, `hassas` ve `baslik-karakter` kurallarında betik DocHub ile **aynı sonucu** verir; `hassas` ve `basliklar` için betik, DocHub gibi önce `{% include %}` ve `.gitbook/vars.yaml` / sayfa `vars` değişkenlerini çözer. `summary`, `kapsam`, `klasor-yeri`, `changelog-onmadde`, `changelog-baslik`, `include-hedef`, `gorsel-hedef`, `baglanti-hedef`, `gitbook-blok` ve `readme` betiğe özgü yerel ek kontrollerdir (DocHub'ın senkron adımına karşılık gelir, birebir aynı değildir). Ayrıca künye (persona, sahip) ve alt sayfa kuralları DocHub tarafındadır. Betik yeşil olsa da DocHub'da künye uyarıları görülebilir.
 * Zorunlu başlık ve gizlilik kuralları tipe özeldir; tipin ayrıntısı için `../../shared/tipler/` altındaki dosyaya bakın.
 * Hassas bilgi bulgusunda içeriğin değerini başka yere kopyalamayın; yalnız metni düzeltin.
 
@@ -73,7 +76,7 @@ GitHub Actions örneği (ürün repo'su, Copilot kopyası kuruluysa):
 name: DocHub doğrula
 on:
   pull_request:
-    paths: ["docs/**", "changelog/**", "dochub.yaml"]
+    paths: ["dochub/**", "dochub.yaml"]
 jobs:
   dogrula:
     runs-on: ubuntu-latest

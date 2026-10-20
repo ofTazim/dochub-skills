@@ -1,5 +1,5 @@
 {
-  "surum": "1.2.0",
+  "surum": "1.3.0",
   "dosyaTabanliTipler": [
     "09",
     "10",
@@ -20,7 +20,9 @@
         "Bu ürün neyi yapmaz"
       ],
       "varsayilanGizlilik": "IcKullanim",
-      "kodIpuclari": ""
+      "kodIpuclari": "",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: her modül (proje/paket/ana menü bölümü). Her modül için: özellik tablosu (özellik, kullanıcıya faydası, durum), bağımlılıklar, sınırlar (\"bu modül neyi yapmaz\")."
     },
     {
       "no": "02",
@@ -35,7 +37,9 @@
         "Riskler ve açık sorular"
       ],
       "varsayilanGizlilik": "Gizli",
-      "kodIpuclari": ""
+      "kodIpuclari": "",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "03",
@@ -50,7 +54,9 @@
         "Teknik kararlar"
       ],
       "varsayilanGizlilik": "Gizli",
-      "kodIpuclari": "- Modül/katman yapısı: üst düzey klasörler, çözüm (.sln) ve proje dosyaları (.csproj, package.json, pom.xml)\n- Veri modeli: entity/model sınıfları, DbContext, şema dosyaları\n- Migration klasörleri ve veritabanı betikleri\n- Bağımlılıklar: paket yöneticisi dosyaları (csproj, package.json, requirements.txt), servisler arası istemciler"
+      "kodIpuclari": "- Modül/katman yapısı: üst düzey klasörler, çözüm (.sln) ve proje dosyaları (.csproj, package.json, pom.xml)\n- Veri modeli: entity/model sınıfları, DbContext, şema dosyaları\n- Migration klasörleri ve veritabanı betikleri\n- Bağımlılıklar: paket yöneticisi dosyaları (csproj, package.json, requirements.txt), servisler arası istemciler",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: her bileşen/proje/modül ve her kalıcı varlık (entity/tablo). Bileşen için: sorumluluk, bağımlılıklar, arayüzler; varlık için: alanlar, ilişkiler, kısıtlar; teknik kararlar gerekçesiyle."
     },
     {
       "no": "04",
@@ -65,7 +71,9 @@
         "Yedeklilik"
       ],
       "varsayilanGizlilik": "Gizli",
-      "kodIpuclari": "- Deploy ve Kubernetes tanımları (deploy/, k8s/, manifest dosyaları)\n- Ortam tanımları (appsettings.*.json, .env.example, ortam değişkeni listeleri)\n- Ağ ve port bilgisi: Dockerfile EXPOSE, compose ports, Service/Ingress tanımları"
+      "kodIpuclari": "- Deploy ve Kubernetes tanımları (deploy/, k8s/, manifest dosyaları)\n- Ortam tanımları (appsettings.*.json, .env.example, ortam değişkeni listeleri)\n- Ağ ve port bilgisi: Dockerfile EXPOSE, compose ports, Service/Ingress tanımları",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "05",
@@ -79,7 +87,9 @@
         "Çıkış kriterleri"
       ],
       "varsayilanGizlilik": "Gizli",
-      "kodIpuclari": ""
+      "kodIpuclari": "",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: her gereksinim/özellik (gereksinim ID'leri, özellik listesi, kullanıcıya açık uçlar). Her birim için en az bir olumlu ve bir olumsuz senaryo: ön koşul, adımlar, beklenen sonuç, gereksinim eşleşmesi."
     },
     {
       "no": "06",
@@ -94,7 +104,9 @@
         "Bakım sahibi"
       ],
       "varsayilanGizlilik": "Gizli",
-      "kodIpuclari": "- Test projeleri ve klasörleri (tests/, *.Tests, __tests__, e2e/)\n- Test çatısı yapılandırması (xunit, jest, vitest, playwright, cypress)\n- CI pipeline dosyaları (.github/workflows, azure-pipelines.yml, Jenkinsfile) ve test adımları"
+      "kodIpuclari": "- Test projeleri ve klasörleri (tests/, *.Tests, __tests__, e2e/)\n- Test çatısı yapılandırması (xunit, jest, vitest, playwright, cypress)\n- CI pipeline dosyaları (.github/workflows, azure-pipelines.yml, Jenkinsfile) ve test adımları",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "07",
@@ -110,7 +122,9 @@
         "Sık karşılaşılan hatalar"
       ],
       "varsayilanGizlilik": "Kisitli",
-      "kodIpuclari": "- Dockerfile ve docker-compose dosyaları\n- deploy/ ve Kubernetes manifestleri, Helm chart'ları (Chart.yaml, values.yaml)\n- appsettings.json ve .env.example (gerçek .env dosyasını okuma/kopyalama)\n- Kurulum betikleri (scripts/, Makefile)"
+      "kodIpuclari": "- Dockerfile ve docker-compose dosyaları\n- deploy/ ve Kubernetes manifestleri, Helm chart'ları (Chart.yaml, values.yaml)\n- appsettings.json ve .env.example (gerçek .env dosyasını okuma/kopyalama)\n- Kurulum betikleri (scripts/, Makefile)",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: her konfigürasyon parametresi (ortam değişkeni, appsettings anahtarı) ve her kurulum bileşeni/adımı. Parametre için: ad, açıklama, varsayılan, zorunlu mu, örnek (gerçek değer değil), etkisi. Adım için: komut, doğrulama, sık hata ve çözümü."
     },
     {
       "no": "08",
@@ -125,7 +139,9 @@
         "Ağ ve port gereksinimleri"
       ],
       "varsayilanGizlilik": "Kisitli",
-      "kodIpuclari": "- docker-compose, Kubernetes ve Helm ile görülen topoloji (servisler, replikalar, bağımlılıklar)\n- Kaynak gereksinimleri: resources.requests/limits, volume ve depolama tanımları\n- Port ve ağ tanımları (Service, Ingress, compose networks)"
+      "kodIpuclari": "- docker-compose, Kubernetes ve Helm ile görülen topoloji (servisler, replikalar, bağımlılıklar)\n- Kaynak gereksinimleri: resources.requests/limits, volume ve depolama tanımları\n- Port ve ağ tanımları (Service, Ingress, compose networks)",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "11",
@@ -141,7 +157,9 @@
         "Sorumluluk paylaşımı"
       ],
       "varsayilanGizlilik": "Kisitli",
-      "kodIpuclari": "- Kimlik doğrulama / yetkilendirme middleware'leri ve politikaları (auth, JWT, OIDC, rol/policy tanımları)\n- Şifreleme ve anahtar yönetimi (veri koruma, TLS ayarları; anahtar/parola değerlerini yazma)\n- Loglama ve maskeleme ayarları\n- Güvenlik başlıkları, CORS, rate limit yapılandırması"
+      "kodIpuclari": "- Kimlik doğrulama / yetkilendirme middleware'leri ve politikaları (auth, JWT, OIDC, rol/policy tanımları)\n- Şifreleme ve anahtar yönetimi (veri koruma, TLS ayarları; anahtar/parola değerlerini yazma)\n- Loglama ve maskeleme ayarları\n- Güvenlik başlıkları, CORS, rate limit yapılandırması",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "12",
@@ -155,7 +173,9 @@
         "Bu dönem yapılmayacaklar"
       ],
       "varsayilanGizlilik": "Kisitli",
-      "kodIpuclari": ""
+      "kodIpuclari": "",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     },
     {
       "no": "16",
@@ -170,7 +190,9 @@
         "Sürümleme"
       ],
       "varsayilanGizlilik": "Kisitli",
-      "kodIpuclari": "- OpenAPI/Swagger tanımları (openapi.json, swagger.yaml)\n- Controller ve endpoint tanımları (route'lar, HTTP metotları)\n- İstemci SDK'ları ve örnek çağrılar\n- Hata kodları ve hata modeli (ProblemDetails, error enum'ları)"
+      "kodIpuclari": "- OpenAPI/Swagger tanımları (openapi.json, swagger.yaml)\n- Controller ve endpoint tanımları (route'lar, HTTP metotları)\n- İstemci SDK'ları ve örnek çağrılar\n- Hata kodları ve hata modeli (ProblemDetails, error enum'ları)",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: her dış API endpoint'i (route tanımları/OpenAPI) ve her entegrasyon sözleşmesi (webhook, dosya biçimi). Her endpoint için: yöntem ve yol, yetki, parametreler/gövde alanları tablosu, örnek istek ve yanıt, hata kodları, sınırlar. Alan bazında gruplanmış alt sayfalar."
     },
     {
       "no": "17",
@@ -185,7 +207,9 @@
         "SSS"
       ],
       "varsayilanGizlilik": "Acik",
-      "kodIpuclari": ""
+      "kodIpuclari": "",
+      "derinlik": "Kapsamli",
+      "kapsamaKurali": "Birim: kullanıcının açabildiği her ekran/route (router tanımı, sayfa bileşenleri) ve her ana görev akışı. Her ekran için alt sayfa: amaç ve kim kullanır, nasıl açılır, alanlar tablosu (alan, açıklama, zorunlu mu, kurallar/sınırlar), butonlar ve sonuçları, rol farkları, durumlar ve hata mesajları (koddaki gerçek metinlerle), adım adım en az bir görev akışı, ipuçları."
     },
     {
       "no": "18",
@@ -200,7 +224,9 @@
         "Bilinen sorunlar"
       ],
       "varsayilanGizlilik": "Acik",
-      "kodIpuclari": "- Git etiketleri (git tag, git describe)\n- Commit geçmişi (son etiketten bu yana)\n- PR başlıkları ve birleştirme commit'leri"
+      "kodIpuclari": "- Git etiketleri (git tag, git describe)\n- Commit geçmişi (son etiketten bu yana)\n- PR başlıkları ve birleştirme commit'leri",
+      "derinlik": "Standart",
+      "kapsamaKurali": ""
     }
   ]
 }
