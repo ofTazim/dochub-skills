@@ -55,14 +55,15 @@ Tipin "Derinlik ve kapsama" bölümü **Kapsamlı** ise `dochub-uret` klasörün
 birimler:
   - ad: Ayarlar ekranı
     kaynak: [web/src/pages/Ayarlar.tsx]
+    seviye: standart      # basit | standart | ayrintili (isteğe bağlı)
     sayfa: ayarlar.md
     durum: yazildi        # yazildi | eksik | kapsam-disi
     not: ""               # kapsam-disi için gerekçe zorunlu
 ```
 
-- `ad`: birimin adı (ekran, endpoint, parametre, bileşen, varlık…). `kaynak`: birimi tanımlayan repo-göreli kod yolları. `sayfa`: klasöre göre göreli sayfa dosyası.
+- `ad`: birimin adı (ekran, endpoint, parametre, bileşen, varlık…). `kaynak`: birimi tanımlayan repo-göreli kod yolları. `sayfa`: klasöre göre göreli sayfa dosyası. `seviye`: birimin yazım derinliği (`basit`: ortak sayfada kısa bölüm/tablo satırı, `standart`: kendi kısa bölümü, `ayrintili`: kapsama kuralının tüm içeriği); verilmezse `standart` sayılır.
 - `durum`: `yazildi` (sayfa yazıldı), `eksik` (henüz yazılmadı), `kapsam-disi` (bilerek yazılmıyor; `not` zorunlu).
-- `dochub-dogrula` `kapsam` kuralı şunları **uyarı** olarak bildirir: dosya yok, `sayfa` yok, `durum: eksik`, `kaynak` yolu repo'da yok (eskimiş), `kapsam-disi` ama `not` boş, geçersiz YAML/biçim (satır numaralı). Glob içeren `kaynak` öğeleri denetlenmez.
+- `dochub-dogrula` `kapsam` kuralı şunları **uyarı** olarak bildirir: dosya yok, `sayfa` yok, `durum: eksik`, `kaynak` yolu repo'da yok (eskimiş), `kapsam-disi` ama `not` boş, geçersiz `seviye`, geçersiz YAML/biçim (satır numaralı). Glob içeren `kaynak` öğeleri denetlenmez.
 
 ## Changelog sürüm sayfası (tip 18)
 

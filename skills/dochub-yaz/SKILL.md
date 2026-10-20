@@ -1,7 +1,7 @@
 ---
 name: dochub-yaz
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 description: "DocHub dokümantasyonu yazım kuralları ve desteklenen GitBook blokları başvurusu: hint, tabs, stepper, details, columns, updates, cards, embed, buton, ikon, kod başlığı, include, değişken; başlık ve hassas bilgi kuralları. Kullan: README.md/SUMMARY.md yazarken, blok sözdizimi sorarken, 'nasıl yazmalıyım'. Use when writing or editing documentation pages that DocHub syncs from Git: GitBook markdown blocks, SUMMARY.md grammar, page front matter, writing rules."
 ---
 

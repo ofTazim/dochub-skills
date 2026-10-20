@@ -1,7 +1,7 @@
 ---
 name: dochub-dogrula
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 description: "DocHub doküman repo'sunu bağımlılıksız Node betiğiyle doğrular: dochub.yaml sözleşmesi, README ve zorunlu başlıklar, SUMMARY.md bağlantıları, başlık karakterleri, changelog ön maddesi ve Kısıtlı/Açık tiplerde hassas bilgi (IP, password/şifre/token). yaml, başlıklar, hassas bilgi ve başlık karakteri kurallarında DocHub ile aynı sonucu verir; CI'da kullanılır. Kullan: dokümantasyonu doğrula, 'dochub kontrolleri', CI şablonu. Use to validate DocHub documentation in a repo (dochub.yaml, required headings, SUMMARY links, changelog front matter, sensitive data) with a Node script."
 ---
 
@@ -58,7 +58,7 @@ node skills/dochub-dogrula/scripts/dochub-dogrula.mjs [kök] [--json]
 | `include-hedef` | Sayfadaki her `{% include "…" %}` çözülüyor mu: sayfaya göre yol (klasör düzeyi, `dochub/.gitbook/includes/` ya da kök `.gitbook/includes/`) ya da bu üç yerde **tek** dosya adı eşleşmesi; birden çok eşleşme "belirsiz" | Yolu düzeltin (kök için doğru `../` derinliği) ya da dosyayı `.gitbook/includes/` altına koyun/adını benzersiz yapın. |
 | `gorsel-hedef` | `![](…)` ve `<img src>` ile verilen yerel görseller depoda var mı (dış URL ve `data:` atlanır) | Görseli ekleyin (`.gitbook/assets/` klasör düzeyi, `dochub/.gitbook/` ya da kök) ya da yolu düzeltin. |
 | `baglanti-hedef` | Yerel `.md` bağlantıları (`[..](x.md)` ve `<a href="x.md">`, başka beyan edilmiş klasördekiler dahil) depoda var mı | Yolu düzeltin ya da bağlantıyı kaldırın. |
-| `kapsam` | **Yalnız Kapsamlı tiplerde** klasördeki `.kapsam.yaml` envanteri. Hepsi **uyarı** (`[UYARI]`, JSON'da `"seviye": "uyari"`; çıkış kodunu etkilemez): dosya yok; birimin `sayfa`'sı klasörde yok; `durum: eksik`; `kaynak` yolu repo'da yok (eskimiş; glob içeren öğeler denetlenmez); `durum: kapsam-disi` ama `not` boş; geçersiz YAML/biçim (mesajda satır numarası). | Dosya yoksa `dochub-uret` ile envanter çıkarın; eksik birimin sayfasını yazın ya da gerekçeyle `kapsam-disi` yapın; eskiyen `kaynak` yolunu `dochub-guncelle` ile düzeltin. Biçim: `../../shared/dochub-yaml.md`. |
+| `kapsam` | **Yalnız Kapsamlı tiplerde** klasördeki `.kapsam.yaml` envanteri. Hepsi **uyarı** (`[UYARI]`, JSON'da `"seviye": "uyari"`; çıkış kodunu etkilemez): dosya yok; birimin `sayfa`'sı klasörde yok; `durum: eksik`; `kaynak` yolu repo'da yok (eskimiş; glob içeren öğeler denetlenmez); `durum: kapsam-disi` ama `not` boş; `seviye` basit/standart/ayrintili dışında; geçersiz YAML/biçim (mesajda satır numarası). | Dosya yoksa `dochub-uret` ile envanter çıkarın; eksik birimin sayfasını yazın ya da gerekçeyle `kapsam-disi` yapın; eskiyen `kaynak` yolunu `dochub-guncelle` ile düzeltin. Biçim: `../../shared/dochub-yaml.md`. |
 | `klasor-yeri` | Beyan edilen `klasor` `dochub/` altında değilse **uyarı** (varsayılan `dochub/<tip-slug>`, changelog için `dochub/changelog`). Yalnız sorun varsa sonuç üretilir. | Klasörü `dochub/` altına taşıyıp `dochub.yaml`'ı güncelleyin (taşımayı kullanıcıyla onaylayın) ya da uyarıyı bilerek bırakın. |
 | `gitbook-blok` | `{% hint %}`, `{% tabs %}`, `{% stepper %}`, `{% code %}`… açılış/kapanışları eşleşiyor mu (tek satırlı hint de dengeli sayılır); yerel dosyaya işaret eden `{% file %}` desteklenmez | Eksik kapanışı ekleyin; dosya ekini SharePoint/URL bağlantısıyla değiştirin. |
 

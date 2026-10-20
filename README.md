@@ -3,8 +3,8 @@
 Ürün repo'nuzda **DocHub uyumlu dokümantasyonu** üreten ve güncel tutan skill'ler. Claude Code ve GitHub Copilot ile çalışır.
 Bu repo DocHub tarafından üretilir ve yayınlanır; dosyaları elle düzenlemeyin, yapılandırmayı DocHub'dan değiştirin.
 
-- Paket sürümü: `1.3.0`
-- Yapılandırma özeti: `bff023e698a9eb9f17292db05cb84adf71ae4bb8af7915cc4b139c07b3c76c02`
+- Paket sürümü: `1.4.0`
+- Yapılandırma özeti: `d6799594edab12509d85ec5c3685d48f263093b6acf6667b90fcae9b9300f743`
 - Kapsanan doküman tipi sayısı: 13
 
 ## Nasıl çalışır?

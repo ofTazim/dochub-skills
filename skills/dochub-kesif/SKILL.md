@@ -1,7 +1,7 @@
 ---
 name: dochub-kesif
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 description: "Repo'yu tarayıp koddan üretilebilecek DocHub doküman tiplerini kanıt dosyalarıyla listeler ve dochub.yaml önerir; onay olmadan dosya yazmaz. Kullan: dokümantasyona yeni başlarken, 'hangi dokümanları yazabiliriz', 'repo'yu incele', 'dochub.yaml oluştur' denince. Use for DocHub documentation discovery: scan a repository, detect which document types (architecture, deployment, security, API, tests, release notes) can be generated from code, propose dochub.yaml."
 ---
 

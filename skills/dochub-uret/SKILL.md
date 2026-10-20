@@ -1,7 +1,7 @@
 ---
 name: dochub-uret
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 description: "Koddan DocHub doküman içeriği üretir: tip şablonunu ve zorunlu başlıkları sırayla doldurur, GitBook bloklarını kullanır, kod örneklerini gerçek dosyalardan alır, emin olunmayan yere 'Doğrulanmalı' notu koyar, sonunda doğrular. Kullan: 'dokümanı yaz', 'README'yi doldur', kurulum/mimari/API/güvenlik dokümantasyonu üretimi. Use to generate DocHub documentation content from source code (architecture, deployment, API reference, security, tests), following the type template and writing guide."
 ---
 
@@ -47,24 +47,42 @@ description: "Koddan DocHub doküman içeriği üretir: tip şablonunu ve zorunl
 Tipin dosyasındaki (`../../shared/tipler/<NN>-<slug>.md`) "Derinlik ve kapsama" bölümü hangi düzeyde yazacağınızı ve kapsama kuralını verir. Düzeye göre ilerleyin:
 
 * **Özet:** tek sayfa; yalnız zorunlu başlıklar, her biri kısa ve kanıta dayalı. Alt sayfa açmayın.
-* **Standart:** `README.md` + gerektiğinde alt sayfalar. Her zorunlu başlığın altı kodda bulduğunuz somut bilgiyle dolar; konu büyükse alt sayfaya taşınır.
-* **Kapsamlı:** aşağıdaki envanter akışını izleyin. Zorunlu başlıklar yetmez; kapsama kuralındaki **her birim** yazılır.
+* **Standart:** `README.md` + gerektiğinde alt sayfalar. Her zorunlu başlığın altı kodda bulduğunuz somut bilgiyle dolar; konu büyükse alt sayfaya taşınır. Aşağıdaki "Ekonomi" kuralları Standart ve Özet için de geçerlidir.
+* **Kapsamlı:** aşağıdaki envanter akışını izleyin. Zorunlu başlıklar yetmez; kapsama kuralındaki **her birim** yazılır, ama her birim aynı ağırlıkta yazılmaz: derinlik birimin karmaşıklığına göre ayarlanır (aşağıda "Birim seviyesi").
 
 **Kapsamlı akış:**
 
 1. **Envanter önce.** Yazmaya başlamadan, kapsama kuralındaki birim tanımına göre (ekran/route, endpoint, parametre, bileşen, varlık, gereksinim vb.) kodu tarayıp birim listesini çıkarın (`git ls-files` + route/endpoint/yapılandırma tanımlarını arama). Listeyi kullanıcıya birim sayısıyla özetleyin.
-2. **`.kapsam.yaml` yazın.** `<klasör>/.kapsam.yaml` dosyasına her birimi `kaynak` (birimi tanımlayan kod dosyaları) ve planlanan `sayfa` ile `durum: eksik` olarak ekleyin. Biçim: `../../shared/dochub-yaml.md` "Kapsam envanteri".
-3. **Her birimi yazın.** Her birim için tip dosyasındaki kapsama kuralının istediği **tüm içeriği** yazın. Bölüm ya da alt sayfa açmak için ayrıca onay gerekmez: iskelet/üretim onayı bunu kapsar (yine de `SUMMARY.md` değişikliğini bildirin). Birim yazıldıkça `.kapsam.yaml`'da `durum: yazildi` yapın. Bir birimi bilerek yazmıyorsanız `durum: kapsam-disi` ve `not` içinde gerekçe yazın; sessizce atlamayın.
+2. **`.kapsam.yaml` yazın.** `<klasör>/.kapsam.yaml` dosyasına her birimi `kaynak` (birimi tanımlayan kod dosyaları), `seviye` (aşağıda), planlanan `sayfa` ve `durum: eksik` ile ekleyin. Biçim: `../../shared/dochub-yaml.md` "Kapsam envanteri".
+3. **Her birimi seviyesine göre yazın.** `ayrintili` birimde kapsama kuralının istediği tüm içeriği, `standart` ve `basit` birimde yalnız o birim için anlamlı olan maddeleri yazın. Bölüm ya da alt sayfa açmak için ayrıca onay gerekmez: iskelet/üretim onayı bunu kapsar (yine de `SUMMARY.md` değişikliğini bildirin). Birim yazıldıkça `.kapsam.yaml`'da `durum: yazildi` yapın. Bir birimi bilerek yazmıyorsanız `durum: kapsam-disi` ve `not` içinde gerekçe yazın; sessizce atlamayın.
 4. **Kapsama raporu verin.** Sonda şunu listeleyin: toplam birim; **kapsanan** (`yazildi`), **eksik** (`eksik`) ve **kapsam dışı** (`kapsam-disi`) sayıları; eksik ve kapsam dışı birimlerin adları ve nedenleri. Eksik birim varsa bunun yazılmadığını açıkça söyleyin.
 
 Büyük envanterde (onlarca birim) işi parçalara bölün (ör. ekran grubu başına) ve her parçadan sonra `.kapsam.yaml`'ı güncelleyin; bağlam dolsa bile hangi birimlerin kaldığı dosyada görünsün.
+
+**Birim seviyesi (Kapsamlı tipte, envanterde her birime verilir):**
+
+| Seviye | Ne zaman | Nasıl yazılır | Yaklaşık ölçek |
+|---|---|---|---|
+| `basit` | Az alan/eylem (≈3'e kadar), rol farkı yok, özel doğrulama ya da hata yok, tek adımlık iş (onay penceresi, salt-okunur liste, tek ayar, varsayılanı olan parametre) | Ortak bir sayfada kısa bölüm ya da tablo satırı; alt sayfa açılmaz | 1–3 cümle ya da bir tablo satırı |
+| `standart` | Birkaç alan ve eylem, sınırlı kural | Kendi bölümü; yalnız dolu maddeler (ör. alan tablosu + sonuç) | Kısa bölüm |
+| `ayrintili` | Çok alanlı form, rol farkları, doğrulama kuralları, çok adımlı akış, sık hata ya da güvenlik/veri etkisi | Kapsama kuralının tüm içeriği; gerekiyorsa alt sayfa | Birim başına bir sayfa |
+
+Kapsama kuralı "her birim için alt sayfa" dese bile `basit` birimler ortak sayfada toplanır. Emin değilseniz düşük seviyeyi seçin; okuyucu sorusu çıkan birim `dochub-guncelle` ile yükseltilir.
+
+**Ekonomi (token ve okuma süresi):**
+
+* Kendini açıklayanı yazmayın: "Kaydet düğmesi değişiklikleri kaydeder", "Ad alanına ad girilir" gibi cümleler yok. Bir maddenin söyleyecek bir şeyi yoksa ("rol farkı yok", "özel hata yok") maddeyi hiç yazmayın.
+* Ortak bilgiyi bir kez yazın ve bağlantı verin: roller ve yetkiler, ortak hata mesajları, ortak alanlar (ör. künye), genel gezinme. Her birimde tekrarlamayın.
+* Düzyazı yerine tablo ve kısa madde; bir fikir bir cümle. README'de alt sayfadaki ayrıntıyı tekrarlamayın.
+* Görev akışını yalnız `ayrintili` birimlerde ve yalnız gerçekten çok adımlıysa yazın.
+* Kodu ekonomik okuyun: yalnız birimin `kaynak` dosyalarını açın; etiket ve mesajları dosyayı baştan sona okumak yerine aramayla (`grep`) bulun; aynı dosyayı tekrar okumayın; benzer birimleri (ör. aynı bileşeni kullanan ekranlar) birlikte işleyin.
 
 **Yüzeysellik kalıpları (yasak):**
 
 * Bir ekranı, endpoint'i ya da parametreyi yalnız adıyla anmak (içeriği, alanları, sonucu yazmadan).
 * Tam listeyi vermek yerine "vb.", "gibi", "ve benzeri" yazmak. Liste kodda sonluysa tamamını yazın.
 * Arayüz metinlerini özetlemek. Etiketleri, buton adlarını, uyarı ve hata mesajlarını koddan (kaynak ya da yerelleştirme dosyası) **aynen** alıp tırnak içinde ya da tabloda verin.
-* Kapsama kuralının istediği bir alt başlığı (alan tablosu, hata kodları, örnek istek vb.) bilinçsizce atlamak.
+* `ayrintili` bir birimde kapsama kuralının istediği bir alt başlığı (alan tablosu, hata kodları, örnek istek vb.) bilinçsizce atlamak.
 
 ### 4. Blokları ve örnekleri kullanın
 

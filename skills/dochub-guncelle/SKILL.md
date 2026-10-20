@@ -1,7 +1,7 @@
 ---
 name: dochub-guncelle
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 description: "Commit/PR farkına (git diff) göre dochub.yaml kaynaklar eşlemesiyle etkilenen DocHub dokümanlarını bulur ve yalnız ilgili bölümleri günceller; gerekirse changelog önerir, sonunda doğrular. Kullan: 'kod değişti dokümanı güncelle', PR sonrası dokümantasyon bakımı, drift kontrolü. Use to keep DocHub documentation up to date after code changes: map git diff to documents via dochub.yaml sources globs, update only affected sections, suggest changelog entry, validate."
 ---
 
@@ -64,7 +64,7 @@ Tabloyu kullanıcıya gösterin ve güncellemeye başlamadan onay alın. Kullan�
 
 Tipin dosyasındaki "Derinlik ve kapsama" bölümü **Kapsamlı** ise (envanter biçimi: `../../shared/dochub-yaml.md` "Kapsam envanteri"), bölüm güncellemesine ek olarak klasördeki `.kapsam.yaml`'ı da güncelleyin:
 
-* **Yeni ya da değişen kaynak** kapsama kuralındaki birim tanımına uyuyorsa (yeni ekran/route, endpoint, parametre, bileşen, varlık vb.) envantere birim ekleyin (`kaynak`, `sayfa`) ve **o birimin içeriğini tipin derinliğinde** yazın: kapsama kuralının istediği tüm içerik, gerçek etiket/mesaj metinleri, tam listeler. Sadece `.kapsam.yaml`'a satır ekleyip sayfayı boş bırakmayın (`durum: eksik` yalnız bilerek ertelenen birimler içindir).
+* **Yeni ya da değişen kaynak** kapsama kuralındaki birim tanımına uyuyorsa (yeni ekran/route, endpoint, parametre, bileşen, varlık vb.) envantere birim ekleyin (`kaynak`, `seviye`, `sayfa`) ve **o birimin içeriğini seviyesine göre** yazın (`../dochub-uret/SKILL.md` "Birim seviyesi" ve "Ekonomi"): `ayrintili` birimde kapsama kuralının tüm içeriği, `basit` birimde ortak sayfada kısa bölüm; etiket/mesaj metinleri koddan aynen. Var olan birim büyüdüyse (yeni alanlar, rol farkı, çok adımlı akış) seviyesini yükseltin; küçüldüyse düşürün ve metni kısaltın. Sadece `.kapsam.yaml`'a satır ekleyip sayfayı boş bırakmayın (`durum: eksik` yalnız bilerek ertelenen birimler içindir).
 * **Mevcut birimin kaynağı** değiştiyse sayfayı güncelleyin, taşındı/yeniden adlandırıldıysa `kaynak` yolunu düzeltin.
 * **Silinen ya da taşınan kaynak:** birimin başka kaynağı kalmadıysa birimi `durum: kapsam-disi` + `not: "Kaynak kaldırıldı: <yol>"` ile işaretleyin ya da sayfasıyla birlikte kaldırmayı kullanıcıya önerin; sessizce silmeyin.
 * Güncelleme sonunda `.kapsam.yaml` ile sayfaları karşılaştırın: `sayfa`'sı olmayan ya da `kaynak`'ı artık var olmayan birim bırakmayın.
